@@ -206,9 +206,9 @@ export function ZipDetailPanel({
 
             <div className="rounded-lg border border-[#e2e8f0] p-2">
               <div className="mb-2 text-xs font-semibold text-[#334155]">24-Month Rent Trend</div>
-              <div className="h-[150px]" key={`rent-trend-${zipRecord.zip}`}>
+              <div className="h-[150px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={rentTrendData}>
+                  <AreaChart key={`rent-trend-${zipRecord.zip}`} data={rentTrendData}>
                     <defs>
                       <linearGradient id="rentFill" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#2563eb" stopOpacity={0.45} />
@@ -236,9 +236,9 @@ export function ZipDetailPanel({
 
             <div className="rounded-lg border border-[#e2e8f0] p-2">
               <div className="mb-2 text-xs font-semibold text-[#334155]">Monthly Permit Volume</div>
-              <div className="h-[135px]" key={`permit-trend-${zipRecord.zip}`}>
+              <div className="h-[135px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={permitData}>
+                  <BarChart key={`permit-trend-${zipRecord.zip}`} data={permitData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                     <XAxis dataKey="month" tick={{ fill: "#64748b", fontSize: 10 }} />
                     <YAxis tick={{ fill: "#64748b", fontSize: 10 }} width={30} />

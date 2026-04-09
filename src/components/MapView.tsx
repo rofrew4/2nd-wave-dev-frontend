@@ -147,7 +147,6 @@ export function MapView({
       <ZipList zips={zips} selectedZip={selectedZip} onSelectZip={onSelectZip} />
 
       <ZipDetailPanel
-        key={selectedRecord?.zip ?? "no-zip-selected"}
         zipRecord={selectedRecord}
         signals={signals}
         isSaved={selectedRecord ? savedZips.has(selectedRecord.zip) : false}

@@ -46,9 +46,13 @@ export const ZIP_WHITELIST = [
   "33139",
   "33140",
   "33141",
+  "33154",
   "33160",
   "33161",
   "33162",
+  "33167",
+  "33168",
+  "33181",
 ] as const
 
 export const ZIPS: ZipRecord[] = [
@@ -189,6 +193,40 @@ export const ZIPS: ZipRecord[] = [
       "Trades at meaningful discount to South/Mid Beach — a value-add opportunity. MBRO climate overlay complicates mixed-use underwriting in flood zones. Best for residential-only or elevated podium designs.",
   },
   {
+    zip: "33154",
+    name: "Surfside / Bal Harbour",
+    hood: "City of Miami Beach — Surfside / Bal Harbour",
+    score: 79,
+    rent: 3740,
+    rg: 2.7,
+    qg: 1.0,
+    vac: 3.2,
+    permits: 4,
+    pipeline: 52,
+    cap: 4.0,
+    rbt: { Studio: 2300, "1 BR": 3100, "2 BR": 4100, "3 BR": 5200 },
+    projects: [
+      {
+        addr: "9500 Collins Ave",
+        units: 28,
+        type: "Boutique Luxury Resi",
+        status: "Permitted",
+        dev: "Surf Club Dev",
+        est: "Q1 2027",
+      },
+      {
+        addr: "301 96th St",
+        units: 24,
+        type: "Mid-Rise Resi",
+        status: "Pending",
+        dev: "Harbour Capital",
+        est: "Q3 2027",
+      },
+    ],
+    insight:
+      "Affluent enclave between North Beach and Sunny Isles. Low pipeline and tight vacancy signal undersupply. Bal Harbour's strict zoning limits new density — favors existing asset repositioning and boutique infill.",
+  },
+  {
     zip: "33160",
     name: "Sunny Isles",
     hood: "City of Sunny Isles Beach",
@@ -290,6 +328,108 @@ export const ZIPS: ZipRecord[] = [
     insight:
       "Yield profile is attractive but underwriting must account for elevated vacancy and a heavier 2027-2028 delivery calendar. Focus on basis discipline and phased value-add execution.",
   },
+  {
+    zip: "33167",
+    name: "North Miami NW",
+    hood: "City of North Miami — NW Corridor",
+    score: 62,
+    rent: 2240,
+    rg: 1.5,
+    qg: 0.6,
+    vac: 6.2,
+    permits: 4,
+    pipeline: 88,
+    cap: 6.1,
+    rbt: { Studio: 1250, "1 BR": 1750, "2 BR": 2350, "3 BR": 3000 },
+    projects: [
+      {
+        addr: "1200 NW 135th St",
+        units: 72,
+        type: "Workforce MFR",
+        status: "Pending",
+        dev: "Community Housing Group",
+        est: "Q4 2027",
+      },
+      {
+        addr: "700 NW 119th St",
+        units: 40,
+        type: "Garden-Style MFR",
+        status: "Under Review",
+        dev: "Greenway Partners",
+        est: "Q2 2028",
+      },
+    ],
+    insight:
+      "Workforce housing corridor with LIHTC activity. Higher vacancy and lower rents limit conventional plays but affordable housing tax credits provide an alternative return path. Best suited for mission-driven or tax-credit strategies.",
+  },
+  {
+    zip: "33168",
+    name: "North Miami Central",
+    hood: "City of North Miami — Central",
+    score: 70,
+    rent: 2520,
+    rg: 1.7,
+    qg: 0.7,
+    vac: 5.4,
+    permits: 5,
+    pipeline: 104,
+    cap: 5.6,
+    rbt: { Studio: 1400, "1 BR": 2000, "2 BR": 2650, "3 BR": 3350 },
+    projects: [
+      {
+        addr: "13600 NE 6th Ave",
+        units: 64,
+        type: "Mixed-Use Resi",
+        status: "Permitted",
+        dev: "NoMi Development",
+        est: "Q3 2027",
+      },
+      {
+        addr: "890 NE 125th Ter",
+        units: 48,
+        type: "Class B+ MFR",
+        status: "Pending",
+        dev: "Pinnacle Urban",
+        est: "Q1 2028",
+      },
+    ],
+    insight:
+      "Central North Miami benefits from adjacency to FIU Biscayne Bay Campus and the MOCA Arts District. Student and young-professional demand provides a rent floor. Value-add at $10–15k/unit door is the strongest play here.",
+  },
+  {
+    zip: "33181",
+    name: "North Miami South",
+    hood: "City of North Miami — South / Biscayne Park",
+    score: 72,
+    rent: 2620,
+    rg: 1.8,
+    qg: 0.8,
+    vac: 4.9,
+    permits: 3,
+    pipeline: 62,
+    cap: 5.2,
+    rbt: { Studio: 1450, "1 BR": 2050, "2 BR": 2750, "3 BR": 3500 },
+    projects: [
+      {
+        addr: "1850 NE 135th St",
+        units: 36,
+        type: "Townhome Cluster",
+        status: "Permitted",
+        dev: "BayPark Homes",
+        est: "Q2 2027",
+      },
+      {
+        addr: "500 NE 151st St",
+        units: 26,
+        type: "Boutique Resi",
+        status: "Under Review",
+        dev: "SilverLine Dev",
+        est: "Q4 2027",
+      },
+    ],
+    insight:
+      "Quieter residential pocket bordering Biscayne Park. Low pipeline and moderate vacancy make it a sleeper for small-scale multifamily and townhome infill. Proximity to Aventura and Sunny Isles drives tenant demand from priced-out renters.",
+  },
 ]
 
 export const SIGNALS: SignalRecord[] = [
@@ -367,5 +507,65 @@ export const SIGNALS: SignalRecord[] = [
       "Miami Beach Resiliency Office expanded the flood/climate overlay zone, complicating mixed-use underwriting.",
     action:
       "Avoid retail-podium underwriting in flagged blocks. Focus on residential-only or elevated designs FEMA AE zone compliant.",
+  },
+  {
+    id: 6,
+    type: "opportunity",
+    zip: "33154",
+    name: "Surfside / Bal Harbour",
+    tag: "Vacancy Drop",
+    tagColor: "#16a34a",
+    date: "Mar 25, 2026",
+    headline:
+      "Surfside vacancy falls to 3.2% — tightest in 3 years as Champlain rebuild timeline extends",
+    detail:
+      "Limited new supply and ongoing Champlain Towers site redevelopment delay keep the submarket undersupplied. Demand is absorbing existing units faster than replacement.",
+    action:
+      "Target value-add acquisitions in the 95th–97th St corridor. Light renovation on older mid-rises can capture 15–20% rent premium vs. current in-place rents.",
+  },
+  {
+    id: 7,
+    type: "opportunity",
+    zip: "33167",
+    name: "North Miami NW",
+    tag: "New Permit",
+    tagColor: "#2563eb",
+    date: "Mar 22, 2026",
+    headline:
+      "72-unit workforce housing project permitted at 1200 NW 135th St with LIHTC allocation",
+    detail:
+      "Community Housing Group secured 9% LIHTC credits for a workforce MFR project. This signals county commitment to affordable pipeline in the corridor.",
+    action:
+      "Evaluate LIHTC partnership or adjacent land banking for future affordable set-aside requirements. County incentives may expand to nearby parcels.",
+  },
+  {
+    id: 8,
+    type: "opportunity",
+    zip: "33168",
+    name: "North Miami Central",
+    tag: "Zoning Change",
+    tagColor: "#7c3aed",
+    date: "Mar 18, 2026",
+    headline:
+      "MOCA Arts District overlay approved — mixed-use density bonus for NE 125th corridor parcels",
+    detail:
+      "City council approved a cultural overlay district providing FAR bonuses for projects incorporating ground-floor arts or community space along NE 125th St near MOCA.",
+    action:
+      "Assemble parcels within the overlay zone to leverage density bonus. Projects blending residential with arts/retail space qualify for expedited permitting.",
+  },
+  {
+    id: 9,
+    type: "risk",
+    zip: "33181",
+    name: "North Miami South",
+    tag: "Climate Overlay",
+    tagColor: "#d97706",
+    date: "Mar 15, 2026",
+    headline:
+      "Biscayne Park flood zone reclassification elevates insurance costs for properties south of 151st St",
+    detail:
+      "FEMA preliminary maps reclassify portions of 33181 south of NE 151st St from Zone X to Zone AE, increasing flood insurance requirements.",
+    action:
+      "Factor elevated insurance premiums ($2–4k/unit annually) into acquisition underwriting for affected parcels. Elevated or post-2002 construction is less impacted.",
   },
 ]

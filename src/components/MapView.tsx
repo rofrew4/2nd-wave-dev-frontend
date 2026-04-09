@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { GeoJSON, MapContainer, TileLayer, Tooltip, ZoomControl, useMap } from "react-leaflet"
 import L, { type PathOptions } from "leaflet"
 import type { GeoJsonObject } from "geojson"
@@ -18,12 +18,10 @@ type MapViewProps = {
   signals: SignalRecord[]
 }
 
-type ZipFeature = GeoJSON.Feature<GeoJSON.Geometry, Record<string, unknown>>
-
 function FitBounds({ geoJson }: { geoJson: GeoJSON.FeatureCollection }) {
   const map = useMap()
 
-  useMemo(() => {
+  useEffect(() => {
     if (!geoJson.features.length) {
       return
     }
@@ -149,6 +147,7 @@ export function MapView({
       <ZipList zips={zips} selectedZip={selectedZip} onSelectZip={onSelectZip} />
 
       <ZipDetailPanel
+        key={selectedRecord?.zip ?? "no-zip-selected"}
         zipRecord={selectedRecord}
         signals={signals}
         isSaved={selectedRecord ? savedZips.has(selectedRecord.zip) : false}

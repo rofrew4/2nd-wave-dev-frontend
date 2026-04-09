@@ -219,7 +219,7 @@ export function ZipDetailPanel({
                     <XAxis dataKey="month" tick={{ fill: "#64748b", fontSize: 10 }} />
                     <YAxis tick={{ fill: "#64748b", fontSize: 10 }} width={45} />
                     <Tooltip
-                      formatter={(value: number) => formatCurrency(value)}
+                      formatter={(value) => formatCurrency(Number(value ?? 0))}
                       labelStyle={{ color: "#334155" }}
                     />
                     <Area

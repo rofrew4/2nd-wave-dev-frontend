@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { ZIP_WHITELIST } from "../data/zips"
 
 const GEOJSON_URL =
@@ -11,6 +11,7 @@ type GeoCollection = GeoJSON.FeatureCollection<
 >
 
 const ZIP_KEYS = ["ZCTA5CE10", "ZCTA5CE20", "ZCTA5CE", "zip", "ZIP", "GEOID10"]
+const ZIP_SET = new Set<string>(ZIP_WHITELIST)
 
 function extractZip(feature: GeoFeature): string | null {
   const props = feature.properties ?? {}
@@ -64,7 +65,7 @@ export function useZipData() {
           })
           .filter(
             (feature): feature is GeoFeature =>
-              !!feature && ZIP_WHITELIST.includes(feature.properties.zip as never),
+              !!feature && ZIP_SET.has(String(feature.properties.zip)),
           )
 
         setGeoJson({
@@ -92,6 +93,5 @@ export function useZipData() {
     return () => abortController.abort()
   }, [])
 
-  const zipSet = useMemo(() => new Set(ZIP_WHITELIST), [])
-  return { geoJson, isLoading, error, zipSet }
+  return { geoJson, isLoading, error }
 }

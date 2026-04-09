@@ -22,10 +22,6 @@ body {
   background: #f1f5f9;
 }
 
-.zip-polygon {
-  transition: all 0.18s ease;
-}
-
 .zip-tooltip.leaflet-tooltip {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -33,8 +29,62 @@ body {
   padding: 8px 10px;
   background: #ffffff;
   color: #0f172a;
+  max-width: 320px;
 }
 
 .zip-tooltip.leaflet-tooltip::before {
   display: none;
+}
+
+/* Pipeline bubble markers */
+.pipeline-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.pipeline-bubble {
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.92;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.pipeline-bubble:hover {
+  transform: scale(1.12);
+  opacity: 1;
+}
+
+.pipeline-units {
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pipeline-dots {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(220, 38, 38, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+.pipeline-pulse {
+  animation: pulse-ring 2s ease-out infinite;
 }

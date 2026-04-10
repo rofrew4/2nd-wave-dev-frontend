@@ -12,8 +12,10 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: "map", label: "Map", icon: "M" },
-  { id: "signals", label: "Signals", icon: "⚡" },
+  { id: "supply", label: "Supply Tracker", icon: "🏗" },
+  { id: "conversions", label: "Conversion Watch", icon: "🔄" },
+  { id: "momentum", label: "Neighborhood Momentum", icon: "📈" },
+  { id: "rental", label: "Rental Map", icon: "🏠" },
   { id: "watchlist", label: "Watchlist", icon: "🔖" },
   { id: "settings", label: "Settings", icon: "⚙" },
 ]
@@ -26,7 +28,7 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
           Z
         </div>
 
-        <nav className="flex flex-col items-center gap-2">
+        <nav className="flex flex-col items-center gap-1.5">
           {NAV_ITEMS.map((item) => {
             const active = activeView === item.id
 
@@ -36,7 +38,7 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
                 type="button"
                 onClick={() => onViewChange(item.id)}
                 title={item.label}
-                className={`flex h-9 w-9 items-center justify-center rounded-lg text-[16px] transition ${
+                className={`flex h-9 w-9 items-center justify-center rounded-lg text-[15px] transition ${
                   active
                     ? "bg-[#eff6ff] text-[#2563eb]"
                     : "text-[#64748b] hover:bg-[#f8fafc]"

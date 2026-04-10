@@ -3,6 +3,8 @@ import type { ZipRecord } from "../data/zips"
 
 type TopBarProps = {
   zips: ZipRecord[]
+  dateFilter: number
+  onDateFilterChange: (days: number) => void
 }
 
 function asCurrency(value: number) {
@@ -13,14 +15,14 @@ function asCurrency(value: number) {
   }).format(value)
 }
 
-function asCompact(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value)
-}
+const DATE_OPTIONS = [
+  { value: 0, label: "All time" },
+  { value: 7, label: "7 days" },
+  { value: 30, label: "30 days" },
+  { value: 90, label: "90 days" },
+]
 
-export function TopBar({ zips }: TopBarProps) {
+export function TopBar({ zips, dateFilter, onDateFilterChange }: TopBarProps) {
   const [now, setNow] = useState(() =>
     new Date().toLocaleString("en-US", {
       weekday: "short",
@@ -51,15 +53,11 @@ export function TopBar({ zips }: TopBarProps) {
     const total = zips.length || 1
     const avgRent = zips.reduce((sum, zip) => sum + zip.rent, 0) / total
     const avgYoY = zips.reduce((sum, zip) => sum + zip.rg, 0) / total
-    const activePermits = zips.reduce((sum, zip) => sum + zip.permits, 0)
-    const pipelineUnits = zips.reduce((sum, zip) => sum + zip.pipeline, 0)
     const avgVacancy = zips.reduce((sum, zip) => sum + zip.vac, 0) / total
 
     return [
       ["Market", "Miami Beach + North Miami"],
       ["Avg Rent", `${asCurrency(avgRent)} (${avgYoY.toFixed(1)}% YoY)`],
-      ["Active Permits", String(activePermits)],
-      ["Pipeline Units", asCompact(pipelineUnits)],
       ["Avg Vacancy", `${avgVacancy.toFixed(1)}%`],
     ] as const
   }, [zips])
@@ -70,7 +68,7 @@ export function TopBar({ zips }: TopBarProps) {
         <input
           type="search"
           placeholder="Search ZIP, neighborhood, project..."
-          className="h-8 w-[240px] rounded-md border border-transparent bg-[#f8fafc] px-3 text-xs text-[#0f172a] outline-none ring-0 placeholder:text-[#94a3b8] focus:border-[#cbd5e1]"
+          className="h-8 w-[220px] rounded-md border border-transparent bg-[#f8fafc] px-3 text-xs text-[#0f172a] outline-none ring-0 placeholder:text-[#94a3b8] focus:border-[#cbd5e1]"
         />
 
         <div className="hidden items-center gap-4 text-[11px] text-[#64748b] xl:flex">
@@ -83,16 +81,25 @@ export function TopBar({ zips }: TopBarProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-3 text-xs text-[#64748b]">
-        <span>{now}</span>
-        <button
-          type="button"
-          className="relative flex h-8 w-8 items-center justify-center rounded-full border border-[#e2e8f0] text-[14px]"
-          aria-label="Notifications"
-        >
-          🔔
-          <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#dc2626]" />
-        </button>
+      <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-1 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-0.5">
+          {DATE_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => onDateFilterChange(opt.value)}
+              className={`rounded-md px-2 py-1 text-[10px] font-medium transition ${
+                dateFilter === opt.value
+                  ? "bg-white text-[#2563eb] shadow-sm"
+                  : "text-[#64748b] hover:text-[#334155]"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+
+        <span className="text-[#64748b]">{now}</span>
       </div>
     </header>
   )

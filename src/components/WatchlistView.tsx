@@ -37,7 +37,6 @@ export function WatchlistView({ items, onOpenZip, onRemoveZip }: WatchlistViewPr
                 <th className="px-4 py-3 font-medium">Score</th>
                 <th className="px-4 py-3 font-medium">Rent</th>
                 <th className="px-4 py-3 font-medium">YoY</th>
-                <th className="px-4 py-3 font-medium">Pipeline</th>
                 <th className="px-4 py-3 font-medium">Vacancy</th>
                 <th className="px-4 py-3 font-medium">Cap</th>
                 <th className="px-4 py-3 font-medium">Action</th>
@@ -64,7 +63,6 @@ export function WatchlistView({ items, onOpenZip, onRemoveZip }: WatchlistViewPr
                     </td>
                     <td className="px-4 py-3 text-[#475569]">{formatCurrency(zip.rent)}</td>
                     <td className="px-4 py-3 text-[#475569]">{zip.rg}%</td>
-                    <td className="px-4 py-3 text-[#475569]">{zip.pipeline}</td>
                     <td className="px-4 py-3 text-[#475569]">{zip.vac}%</td>
                     <td className="px-4 py-3 text-[#475569]">{zip.cap}%</td>
                     <td className="px-4 py-3">

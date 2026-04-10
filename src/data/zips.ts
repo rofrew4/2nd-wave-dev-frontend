@@ -104,259 +104,67 @@ const CURRENT_PERMITS: Permit[] = [
   { id: "rv-16", zip: "33162", addr: "1900 NE 164th St", lat: 25.9290, lng: -80.1620, units: 34, type: "Interior + Amenity Rehab", category: "renovation", status: "Pending", dev: "Priderock Capital", est: "Q2 2027", filed: "2026-03-28" },
 ]
 
-type ZipProfile = {
-  zip: string
-  minPerMonth: number
-  maxPerMonth: number
-  trend: "rising" | "declining" | "steady" | "sharp-rise"
-  ncWeight: number
-  cvWeight: number
-  rvWeight: number
-  latCenter: number
-  lngCenter: number
-  latSpread: number
-  lngSpread: number
-  streets: string[]
-  developers: string[]
-  ncTypes: string[]
-  cvTypes: string[]
-  rvTypes: string[]
+export const PERMITS: Permit[] = CURRENT_PERMITS
+
+export type TrendPoint = { quarter: string; filed: number; permitted: number }
+
+export const ZIP_TRENDS: Record<string, TrendPoint[]> = {
+  "33139": [
+    { quarter: "Q2 2024", filed: 38, permitted: 30 }, { quarter: "Q3 2024", filed: 42, permitted: 34 }, { quarter: "Q4 2024", filed: 45, permitted: 36 },
+    { quarter: "Q1 2025", filed: 52, permitted: 40 }, { quarter: "Q2 2025", filed: 58, permitted: 44 }, { quarter: "Q3 2025", filed: 55, permitted: 48 },
+    { quarter: "Q4 2025", filed: 62, permitted: 50 }, { quarter: "Q1 2026", filed: 71, permitted: 54 }, { quarter: "Q2 2026", filed: 78, permitted: 42 },
+  ],
+  "33140": [
+    { quarter: "Q2 2024", filed: 28, permitted: 22 }, { quarter: "Q3 2024", filed: 30, permitted: 24 }, { quarter: "Q4 2024", filed: 27, permitted: 23 },
+    { quarter: "Q1 2025", filed: 32, permitted: 26 }, { quarter: "Q2 2025", filed: 29, permitted: 25 }, { quarter: "Q3 2025", filed: 34, permitted: 28 },
+    { quarter: "Q4 2025", filed: 31, permitted: 27 }, { quarter: "Q1 2026", filed: 35, permitted: 29 }, { quarter: "Q2 2026", filed: 37, permitted: 20 },
+  ],
+  "33141": [
+    { quarter: "Q2 2024", filed: 14, permitted: 10 }, { quarter: "Q3 2024", filed: 16, permitted: 12 }, { quarter: "Q4 2024", filed: 18, permitted: 14 },
+    { quarter: "Q1 2025", filed: 22, permitted: 16 }, { quarter: "Q2 2025", filed: 25, permitted: 20 }, { quarter: "Q3 2025", filed: 28, permitted: 22 },
+    { quarter: "Q4 2025", filed: 32, permitted: 24 }, { quarter: "Q1 2026", filed: 36, permitted: 28 }, { quarter: "Q2 2026", filed: 41, permitted: 22 },
+  ],
+  "33154": [
+    { quarter: "Q2 2024", filed: 12, permitted: 10 }, { quarter: "Q3 2024", filed: 18, permitted: 14 }, { quarter: "Q4 2024", filed: 22, permitted: 18 },
+    { quarter: "Q1 2025", filed: 20, permitted: 17 }, { quarter: "Q2 2025", filed: 16, permitted: 14 }, { quarter: "Q3 2025", filed: 14, permitted: 12 },
+    { quarter: "Q4 2025", filed: 13, permitted: 11 }, { quarter: "Q1 2026", filed: 12, permitted: 10 }, { quarter: "Q2 2026", filed: 11, permitted: 6 },
+  ],
+  "33160": [
+    { quarter: "Q2 2024", filed: 45, permitted: 38 }, { quarter: "Q3 2024", filed: 52, permitted: 42 }, { quarter: "Q4 2024", filed: 58, permitted: 48 },
+    { quarter: "Q1 2025", filed: 55, permitted: 50 }, { quarter: "Q2 2025", filed: 48, permitted: 44 }, { quarter: "Q3 2025", filed: 42, permitted: 38 },
+    { quarter: "Q4 2025", filed: 36, permitted: 32 }, { quarter: "Q1 2026", filed: 30, permitted: 26 }, { quarter: "Q2 2026", filed: 26, permitted: 14 },
+  ],
+  "33161": [
+    { quarter: "Q2 2024", filed: 18, permitted: 14 }, { quarter: "Q3 2024", filed: 20, permitted: 16 }, { quarter: "Q4 2024", filed: 22, permitted: 18 },
+    { quarter: "Q1 2025", filed: 24, permitted: 20 }, { quarter: "Q2 2025", filed: 28, permitted: 22 }, { quarter: "Q3 2025", filed: 35, permitted: 28 },
+    { quarter: "Q4 2025", filed: 44, permitted: 34 }, { quarter: "Q1 2026", filed: 56, permitted: 40 }, { quarter: "Q2 2026", filed: 68, permitted: 36 },
+  ],
+  "33162": [
+    { quarter: "Q2 2024", filed: 22, permitted: 18 }, { quarter: "Q3 2024", filed: 24, permitted: 20 }, { quarter: "Q4 2024", filed: 23, permitted: 19 },
+    { quarter: "Q1 2025", filed: 26, permitted: 22 }, { quarter: "Q2 2025", filed: 25, permitted: 21 }, { quarter: "Q3 2025", filed: 28, permitted: 24 },
+    { quarter: "Q4 2025", filed: 27, permitted: 23 }, { quarter: "Q1 2026", filed: 30, permitted: 26 }, { quarter: "Q2 2026", filed: 28, permitted: 16 },
+  ],
+  "33167": [
+    { quarter: "Q2 2024", filed: 6, permitted: 4 }, { quarter: "Q3 2024", filed: 5, permitted: 4 }, { quarter: "Q4 2024", filed: 7, permitted: 5 },
+    { quarter: "Q1 2025", filed: 8, permitted: 6 }, { quarter: "Q2 2025", filed: 10, permitted: 8 }, { quarter: "Q3 2025", filed: 12, permitted: 9 },
+    { quarter: "Q4 2025", filed: 14, permitted: 10 }, { quarter: "Q1 2026", filed: 16, permitted: 12 }, { quarter: "Q2 2026", filed: 18, permitted: 10 },
+  ],
+  "33168": [
+    { quarter: "Q2 2024", filed: 10, permitted: 8 }, { quarter: "Q3 2024", filed: 12, permitted: 9 }, { quarter: "Q4 2024", filed: 14, permitted: 11 },
+    { quarter: "Q1 2025", filed: 16, permitted: 12 }, { quarter: "Q2 2025", filed: 20, permitted: 16 }, { quarter: "Q3 2025", filed: 24, permitted: 18 },
+    { quarter: "Q4 2025", filed: 28, permitted: 22 }, { quarter: "Q1 2026", filed: 32, permitted: 24 }, { quarter: "Q2 2026", filed: 36, permitted: 20 },
+  ],
+  "33181": [
+    { quarter: "Q2 2024", filed: 10, permitted: 8 }, { quarter: "Q3 2024", filed: 12, permitted: 10 }, { quarter: "Q4 2024", filed: 11, permitted: 9 },
+    { quarter: "Q1 2025", filed: 13, permitted: 10 }, { quarter: "Q2 2025", filed: 12, permitted: 10 }, { quarter: "Q3 2025", filed: 14, permitted: 12 },
+    { quarter: "Q4 2025", filed: 13, permitted: 11 }, { quarter: "Q1 2026", filed: 15, permitted: 12 }, { quarter: "Q2 2026", filed: 14, permitted: 8 },
+  ],
+  "33109": [
+    { quarter: "Q2 2024", filed: 3, permitted: 2 }, { quarter: "Q3 2024", filed: 2, permitted: 2 }, { quarter: "Q4 2024", filed: 4, permitted: 3 },
+    { quarter: "Q1 2025", filed: 3, permitted: 3 }, { quarter: "Q2 2025", filed: 2, permitted: 2 }, { quarter: "Q3 2025", filed: 3, permitted: 2 },
+    { quarter: "Q4 2025", filed: 2, permitted: 2 }, { quarter: "Q1 2026", filed: 3, permitted: 2 }, { quarter: "Q2 2026", filed: 2, permitted: 1 },
+  ],
 }
-
-const ZIP_PROFILES: ZipProfile[] = [
-  {
-    zip: "33139", minPerMonth: 15, maxPerMonth: 25, trend: "rising",
-    ncWeight: 0.40, cvWeight: 0.30, rvWeight: 0.30,
-    latCenter: 25.7850, lngCenter: -80.1350, latSpread: 0.015, lngSpread: 0.008,
-    streets: ["Collins Ave", "Ocean Dr", "Washington Ave", "Alton Rd", "West Ave", "Meridian Ave", "Bay Rd", "Euclid Ave", "Drexel Ave", "Purdy Ave", "Lincoln Rd", "Espanola Way", "5th St", "14th St", "21st St"],
-    developers: ["Terra Group", "Rockpoint Group", "Related Group", "Crescent Heights", "Shvo Group", "Brickman RE", "Lincoln Property", "Aimco"],
-    ncTypes: ["Class A MFR", "Luxury Rental", "Mixed-Use Resi", "Boutique Luxury Resi"],
-    cvTypes: ["Hotel-to-Resi", "Retail-to-Resi", "Hotel-to-Condo"],
-    rvTypes: ["Full Rehab — Class B to A", "Systems Upgrade + Amenity", "Interior Rehab — Value-Add"],
-  },
-  {
-    zip: "33140", minPerMonth: 10, maxPerMonth: 18, trend: "steady",
-    ncWeight: 0.35, cvWeight: 0.30, rvWeight: 0.35,
-    latCenter: 25.8200, lngCenter: -80.1300, latSpread: 0.008, lngSpread: 0.006,
-    streets: ["Collins Ave", "Indian Creek Dr", "Pine Tree Dr", "Alton Rd", "Sheridan Ave", "Prairie Ave", "Royal Palm Ave", "Meridian Ave"],
-    developers: ["Setai Dev", "Beach Capital", "Fontainebleau Development", "Mast Capital", "Starwood Capital"],
-    ncTypes: ["Boutique Luxury Resi", "Class A MFR", "Luxury MFR", "Mid-Rise Resi"],
-    cvTypes: ["Hotel-to-Resi", "Office-to-Resi", "Retail-to-Resi"],
-    rvTypes: ["Interior Rehab — Value-Add", "Full Rehab — Repositioning", "Envelope + MEP Upgrade"],
-  },
-  {
-    zip: "33141", minPerMonth: 8, maxPerMonth: 15, trend: "rising",
-    ncWeight: 0.40, cvWeight: 0.25, rvWeight: 0.35,
-    latCenter: 25.8450, lngCenter: -80.1245, latSpread: 0.010, lngSpread: 0.005,
-    streets: ["Collins Ave", "Harding Ave", "Byron Ave", "Indian Creek Dr", "Abbott Ave", "Carlyle Ave"],
-    developers: ["Ocean Ventures", "Coastal Builders", "North Beach Partners", "Greystar", "Bridge Investment"],
-    ncTypes: ["Class A MFR", "Mid-Rise Resi", "Garden-Style MFR"],
-    cvTypes: ["Retail-to-Resi", "Hotel-to-Resi"],
-    rvTypes: ["Full Rehab — Repositioning", "Envelope + MEP Upgrade", "Interior Rehab"],
-  },
-  {
-    zip: "33154", minPerMonth: 5, maxPerMonth: 10, trend: "steady",
-    ncWeight: 0.30, cvWeight: 0.25, rvWeight: 0.45,
-    latCenter: 25.8715, lngCenter: -80.1240, latSpread: 0.005, lngSpread: 0.004,
-    streets: ["Collins Ave", "Harding Ave", "Abbott Ave", "96th St", "Bal Bay Dr"],
-    developers: ["Surf Club Dev", "Harbour Capital", "Bal Harbour Group", "One Sotheby's Dev"],
-    ncTypes: ["Boutique Luxury Resi", "Mid-Rise Resi"],
-    cvTypes: ["Retail-to-Resi", "Hotel-to-Resi"],
-    rvTypes: ["Interior Rehab", "Full Rehab — Repositioning", "Envelope + Amenity Add"],
-  },
-  {
-    zip: "33160", minPerMonth: 12, maxPerMonth: 22, trend: "declining",
-    ncWeight: 0.40, cvWeight: 0.25, rvWeight: 0.35,
-    latCenter: 25.9380, lngCenter: -80.1260, latSpread: 0.010, lngSpread: 0.008,
-    streets: ["Collins Ave", "N Bay Rd", "Sunny Isles Blvd", "Ocean Blvd", "Atlantic Blvd", "Golden Beach Dr"],
-    developers: ["Atlantic Crest", "Harborline Partners", "Dezer Development", "Turnberry Associates"],
-    ncTypes: ["Luxury Rental Tower", "Mid-Rise MFR", "Class A MFR"],
-    cvTypes: ["Hotel-to-Condo", "Hotel-to-Resi"],
-    rvTypes: ["Systems Upgrade + Reno", "Full Rehab — Repositioning", "Interior Rehab — Value-Add"],
-  },
-  {
-    zip: "33161", minPerMonth: 10, maxPerMonth: 18, trend: "sharp-rise",
-    ncWeight: 0.45, cvWeight: 0.20, rvWeight: 0.35,
-    latCenter: 25.8895, lngCenter: -80.1720, latSpread: 0.008, lngSpread: 0.008,
-    streets: ["NE 125th St", "NE 6th Ave", "NE 8th Ave", "NE 10th Ave", "NE 123rd St", "NE 126th St", "NE 127th St", "NE 12th Ave", "NE 7th Ave", "NE 9th Ave"],
-    developers: ["NMB Capital", "Keystone Partners", "Urban Core Dev", "Blackstone RE", "Cortland"],
-    ncTypes: ["Mixed-Use Resi", "Garden-Style MFR", "Class A MFR"],
-    cvTypes: ["Warehouse-to-Resi", "Retail-to-Resi"],
-    rvTypes: ["Full Rehab — Value-Add", "Interior Rehab — Value-Add", "Interior Rehab"],
-  },
-  {
-    zip: "33162", minPerMonth: 8, maxPerMonth: 14, trend: "steady",
-    ncWeight: 0.40, cvWeight: 0.15, rvWeight: 0.45,
-    latCenter: 25.9200, lngCenter: -80.1590, latSpread: 0.010, lngSpread: 0.006,
-    streets: ["NE 20th Ave", "NE 163rd St", "NE 18th Ave", "NE 22nd Ave", "NE 162nd St", "NE 160th St", "NE 164th St", "NE 16th Ave", "NE 19th Ave", "NE 21st Ave"],
-    developers: ["Sunline Housing", "Gateway Urban", "Morgan Properties", "Priderock Capital"],
-    ncTypes: ["Workforce MFR", "Mixed-Income Resi", "Garden-Style MFR"],
-    cvTypes: ["Retail-to-Resi", "Office-to-Resi"],
-    rvTypes: ["Full Rehab — Repositioning", "Systems Upgrade + Reno", "Interior + Amenity Rehab"],
-  },
-  {
-    zip: "33167", minPerMonth: 4, maxPerMonth: 8, trend: "rising",
-    ncWeight: 0.45, cvWeight: 0.05, rvWeight: 0.50,
-    latCenter: 25.8940, lngCenter: -80.2035, latSpread: 0.008, lngSpread: 0.005,
-    streets: ["NW 135th St", "NW 119th St", "NW 131st St", "NW 125th St", "NW 130th St", "NW 128th St", "NW 133rd St", "NW 132nd St"],
-    developers: ["Community Housing Group", "Greenway Partners", "Housing Trust Group"],
-    ncTypes: ["Workforce MFR", "Garden-Style MFR"],
-    cvTypes: ["Warehouse-to-Resi"],
-    rvTypes: ["Full Rehab — Workforce", "Interior Rehab", "Systems Upgrade + Reno"],
-  },
-  {
-    zip: "33168", minPerMonth: 6, maxPerMonth: 12, trend: "rising",
-    ncWeight: 0.40, cvWeight: 0.15, rvWeight: 0.45,
-    latCenter: 25.8950, lngCenter: -80.1800, latSpread: 0.006, lngSpread: 0.004,
-    streets: ["NE 6th Ave", "NE 5th Ave", "NE 4th Ave", "NE 8th Ave", "NE 125th Ter", "NE 2nd Ave", "NE 3rd Ave", "NE 7th Ave"],
-    developers: ["NoMi Development", "Pinnacle Urban", "Zenith Capital"],
-    ncTypes: ["Mixed-Use Resi", "Class B+ MFR", "Mid-Rise Resi"],
-    cvTypes: ["Retail-to-Resi", "Office-to-Resi"],
-    rvTypes: ["Envelope + Amenity Add", "Interior Rehab", "Full Rehab — Repositioning"],
-  },
-  {
-    zip: "33181", minPerMonth: 5, maxPerMonth: 10, trend: "steady",
-    ncWeight: 0.40, cvWeight: 0.10, rvWeight: 0.50,
-    latCenter: 25.9040, lngCenter: -80.1648, latSpread: 0.008, lngSpread: 0.004,
-    streets: ["NE 135th St", "NE 137th St", "NE 140th St", "NE 142nd St", "NE 144th St", "NE 138th St", "NE 151st St"],
-    developers: ["BayPark Homes", "SilverLine Dev", "Alliance Residential"],
-    ncTypes: ["Townhome Cluster", "Boutique Resi", "Garden-Style MFR"],
-    cvTypes: ["Retail-to-Resi"],
-    rvTypes: ["Interior Rehab — Value-Add", "Full Rehab — Repositioning", "Envelope + MEP Upgrade"],
-  },
-  {
-    zip: "33109", minPerMonth: 1, maxPerMonth: 3, trend: "steady",
-    ncWeight: 0.40, cvWeight: 0.05, rvWeight: 0.55,
-    latCenter: 25.7632, lngCenter: -80.1439, latSpread: 0.002, lngSpread: 0.002,
-    streets: ["Fisher Island Dr", "Marina Dr", "Bay Ln", "Island Way"],
-    developers: ["Fisher Island Dev", "Fisher Island Holdings"],
-    ncTypes: ["Ultra-Luxury Condo"],
-    cvTypes: ["Hotel-to-Resi"],
-    rvTypes: ["Luxury Rehab", "Interior Rehab — Value-Add"],
-  },
-]
-
-function seedRandom(seed: number): () => number {
-  let s = seed
-  return () => {
-    s = (s * 1103515245 + 12345) & 0x7fffffff
-    return s / 0x7fffffff
-  }
-}
-
-function generateHistoricalPermits(): Permit[] {
-  const permits: Permit[] = []
-  const rng = seedRandom(42_7139)
-
-  const startYear = 2024
-  const startMonth = 3 // April (0-indexed)
-  const endYear = 2026
-  const endMonth = 3 // April 2026
-
-  const threeMonthsAgo = new Date(2026, 0, 10) // Jan 10 2026 as cutoff for recent
-
-  let idCounter = 0
-
-  for (const profile of ZIP_PROFILES) {
-    const cursor = new Date(startYear, startMonth, 1)
-    const end = new Date(endYear, endMonth, 1)
-    let quarterIdx = 0
-
-    while (cursor < end) {
-      const year = cursor.getFullYear()
-      const month = cursor.getMonth()
-      const totalQuarters = 9 // Q2 2024 to Q2 2026
-      const trendProgress = quarterIdx / totalQuarters
-
-      let base: number
-      switch (profile.trend) {
-        case "rising":
-          base = profile.minPerMonth + (profile.maxPerMonth - profile.minPerMonth) * trendProgress * 0.8
-          break
-        case "sharp-rise":
-          base = profile.minPerMonth + (profile.maxPerMonth - profile.minPerMonth) * Math.pow(trendProgress, 0.6)
-          break
-        case "declining":
-          base = profile.maxPerMonth - (profile.maxPerMonth - profile.minPerMonth) * trendProgress * 0.6
-          break
-        default:
-          base = (profile.minPerMonth + profile.maxPerMonth) / 2
-      }
-
-      const noise = (rng() - 0.5) * 4
-      const count = Math.max(1, Math.round(base + noise))
-      const daysInMonth = new Date(year, month + 1, 0).getDate()
-
-      for (let i = 0; i < count; i++) {
-        idCounter++
-        const day = Math.min(daysInMonth, Math.max(1, Math.floor(rng() * daysInMonth) + 1))
-        const filedDate = new Date(year, month, day)
-        const filedStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
-
-        const catRoll = rng()
-        let category: PermitCategory
-        let typePool: string[]
-        if (catRoll < profile.ncWeight) {
-          category = "new-construction"
-          typePool = profile.ncTypes
-        } else if (catRoll < profile.ncWeight + profile.cvWeight) {
-          category = "conversion"
-          typePool = profile.cvTypes
-        } else {
-          category = "renovation"
-          typePool = profile.rvTypes
-        }
-
-        const pType = typePool[Math.floor(rng() * typePool.length)]
-        const dev = profile.developers[Math.floor(rng() * profile.developers.length)]
-        const street = profile.streets[Math.floor(rng() * profile.streets.length)]
-        const streetNum = Math.floor(rng() * 19000) + 100
-
-        const lat = profile.latCenter + (rng() - 0.5) * 2 * profile.latSpread
-        const lng = profile.lngCenter + (rng() - 0.5) * 2 * profile.lngSpread
-
-        const unitBase = category === "new-construction" ? 40 : category === "conversion" ? 25 : 35
-        const unitVariance = Math.floor(rng() * 80) - 20
-        const units = Math.max(8, unitBase + unitVariance)
-
-        let status: "Permitted" | "Pending" | "Under Review"
-        if (filedDate >= threeMonthsAgo) {
-          const sRoll = rng()
-          status = sRoll < 0.4 ? "Pending" : sRoll < 0.7 ? "Under Review" : "Permitted"
-        } else {
-          status = "Permitted"
-        }
-
-        const estQOffset = Math.floor(rng() * 4) + 3
-        const estDate = new Date(year, month + estQOffset * 3, 1)
-        const estQ = Math.floor(estDate.getMonth() / 3) + 1
-        const est = `Q${estQ} ${estDate.getFullYear()}`
-
-        permits.push({
-          id: `gen-${idCounter}`,
-          zip: profile.zip,
-          addr: `${streetNum} ${street}`,
-          lat: Math.round(lat * 10000) / 10000,
-          lng: Math.round(lng * 10000) / 10000,
-          units,
-          type: pType,
-          category,
-          status,
-          dev,
-          est,
-          filed: filedStr,
-        })
-      }
-
-      cursor.setMonth(cursor.getMonth() + 1)
-      if (month % 3 === 2) quarterIdx++
-    }
-  }
-
-  return permits
-}
-
-export const PERMITS: Permit[] = [...CURRENT_PERMITS, ...generateHistoricalPermits()]
 
 export const AI_SUMMARIES: Record<string, string> = {
   all: "Market-wide permit activity across Miami Beach and North Miami is trending upward with 2026 Q1 showing the highest quarterly volume in 2 years. South Beach and North Miami are driving growth — South Beach through luxury conversions and new construction, North Miami through the R4 upzone unlocking 8-story density on NE 125th St. Sunny Isles is cooling after a 2025 peak. Renovation permits are accelerating across all ZIPs, suggesting institutional capital is repositioning existing stock ahead of new supply deliveries.",

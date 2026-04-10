@@ -2,6 +2,8 @@ export type BedroomMix = Record<"Studio" | "1 BR" | "2 BR" | "3 BR", number>
 
 export type ZipProject = {
   addr: string
+  lat: number
+  lng: number
   units: number
   type: string
   status: "Permitted" | "Pending" | "Under Review"
@@ -26,7 +28,7 @@ export type ZipRecord = {
   insight: string
 }
 
-export type SignalType = "opportunity" | "risk"
+export type SignalType = "permit" | "rental"
 
 export type SignalRecord = {
   id: number
@@ -72,6 +74,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "One Fisher Island Dr",
+        lat: 25.7632,
+        lng: -80.1437,
         units: 18,
         type: "Ultra-Luxury Condo",
         status: "Permitted",
@@ -98,6 +102,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "1428 Ocean Dr",
+        lat: 25.7855,
+        lng: -80.1301,
         units: 62,
         type: "Luxury Conversion",
         status: "Permitted",
@@ -106,6 +112,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "855 Collins Ave",
+        lat: 25.7792,
+        lng: -80.1319,
         units: 44,
         type: "Hotel-to-Resi",
         status: "Pending",
@@ -114,6 +122,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "430 W 41st St",
+        lat: 25.8125,
+        lng: -80.1405,
         units: 104,
         type: "Class A MFR",
         status: "Under Review",
@@ -140,6 +150,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "4525 Collins Ave",
+        lat: 25.8218,
+        lng: -80.1266,
         units: 42,
         type: "Boutique Luxury Resi",
         status: "Permitted",
@@ -148,6 +160,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "3900 Indian Creek Dr",
+        lat: 25.8175,
+        lng: -80.1295,
         units: 42,
         type: "Condo Conversion",
         status: "Pending",
@@ -174,6 +188,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "6900 Collins Ave",
+        lat: 25.8452,
+        lng: -80.1213,
         units: 56,
         type: "Class A MFR",
         status: "Pending",
@@ -182,6 +198,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "7550 Byron Ave",
+        lat: 25.8508,
+        lng: -80.1258,
         units: 40,
         type: "Mid-Rise Resi",
         status: "Pending",
@@ -208,6 +226,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "9500 Collins Ave",
+        lat: 25.8725,
+        lng: -80.1218,
         units: 28,
         type: "Boutique Luxury Resi",
         status: "Permitted",
@@ -216,6 +236,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "301 96th St",
+        lat: 25.8690,
+        lng: -80.1255,
         units: 24,
         type: "Mid-Rise Resi",
         status: "Pending",
@@ -242,6 +264,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "17501 Collins Ave",
+        lat: 25.9365,
+        lng: -80.1228,
         units: 88,
         type: "Luxury Rental Tower",
         status: "Permitted",
@@ -250,6 +274,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "19000 N Bay Rd",
+        lat: 25.9432,
+        lng: -80.1310,
         units: 54,
         type: "Mid-Rise MFR",
         status: "Pending",
@@ -276,6 +302,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "12800 NE 8th Ave",
+        lat: 25.8905,
+        lng: -80.1685,
         units: 96,
         type: "Garden-Style MFR",
         status: "Pending",
@@ -284,6 +312,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "1600 NE 125th St",
+        lat: 25.8893,
+        lng: -80.1742,
         units: 54,
         type: "Mixed-Use Resi",
         status: "Permitted",
@@ -310,6 +340,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "14900 NE 20th Ave",
+        lat: 25.9152,
+        lng: -80.1575,
         units: 112,
         type: "Workforce MFR",
         status: "Under Review",
@@ -318,6 +350,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "2210 NE 163rd St",
+        lat: 25.9280,
+        lng: -80.1618,
         units: 64,
         type: "Mixed-Income Resi",
         status: "Pending",
@@ -344,6 +378,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "1200 NW 135th St",
+        lat: 25.8985,
+        lng: -80.2052,
         units: 72,
         type: "Workforce MFR",
         status: "Pending",
@@ -352,6 +388,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "700 NW 119th St",
+        lat: 25.8835,
+        lng: -80.2015,
         units: 40,
         type: "Garden-Style MFR",
         status: "Under Review",
@@ -378,6 +416,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "13600 NE 6th Ave",
+        lat: 25.8965,
+        lng: -80.1788,
         units: 64,
         type: "Mixed-Use Resi",
         status: "Permitted",
@@ -386,6 +426,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "890 NE 125th Ter",
+        lat: 25.8900,
+        lng: -80.1815,
         units: 48,
         type: "Class B+ MFR",
         status: "Pending",
@@ -412,6 +454,8 @@ export const ZIPS: ZipRecord[] = [
     projects: [
       {
         addr: "1850 NE 135th St",
+        lat: 25.8992,
+        lng: -80.1635,
         units: 36,
         type: "Townhome Cluster",
         status: "Permitted",
@@ -420,6 +464,8 @@ export const ZIPS: ZipRecord[] = [
       },
       {
         addr: "500 NE 151st St",
+        lat: 25.9118,
+        lng: -80.1658,
         units: 26,
         type: "Boutique Resi",
         status: "Under Review",
@@ -435,26 +481,11 @@ export const ZIPS: ZipRecord[] = [
 export const SIGNALS: SignalRecord[] = [
   {
     id: 1,
-    type: "opportunity",
-    zip: "33161",
-    name: "North Miami",
-    tag: "Zoning Change",
-    tagColor: "#7c3aed",
-    date: "Apr 7, 2026",
-    headline:
-      "R4 upzone approved on NE 125th St — unlocks 8-story density across 6 blocks",
-    detail:
-      "City council approved 8-story zoning along NE 125th between Biscayne and NE 8th Ave. Prior limit was 4 stories.",
-    action:
-      "Immediate assemblage window. Density supports 80–100+ units/acre at $35–45/sf basis — first-mover advantage before the market reprices.",
-  },
-  {
-    id: 2,
-    type: "opportunity",
+    type: "permit",
     zip: "33139",
     name: "South Beach",
     tag: "New Permit",
-    tagColor: "#2563eb",
+    tagColor: "#16a34a",
     date: "Apr 5, 2026",
     headline:
       "62-unit luxury conversion permitted at 1428 Ocean Dr by Terra Group",
@@ -464,108 +495,138 @@ export const SIGNALS: SignalRecord[] = [
       "Identify off-market parcels within a 3-block radius of Ocean Dr 14th–17th St before the filing becomes widely known.",
   },
   {
-    id: 3,
-    type: "risk",
+    id: 2,
+    type: "permit",
     zip: "33139",
     name: "South Beach",
-    tag: "Regulatory Risk",
-    tagColor: "#d97706",
+    tag: "Permit Filed",
+    tagColor: "#6366f1",
     date: "Apr 2, 2026",
     headline:
-      "Condo conversion moratorium extended through Q2 2027 by 5-2 commission vote",
+      "104-unit Class A MFR under review at 430 W 41st St by Rockpoint Group",
     detail:
-      "Three pending hotel-to-condo projects now blocked. Second extension since 2024.",
+      "Large-scale rental filing at the north edge of South Beach. If approved, this would be the largest new multifamily project in 33139 since 2023.",
     action:
-      "Avoid hotel-to-condo conversion plays in 33139 until moratorium lifts. Redirect to purpose-built rental or land bank for post-moratorium plays.",
+      "Monitor review timeline. Adjacent parcels on W 41st and Pine Tree Dr may see upward price pressure once this project clears zoning.",
+  },
+  {
+    id: 3,
+    type: "rental",
+    zip: "33140",
+    name: "Mid-Beach",
+    tag: "Rent Growth",
+    tagColor: "#2563eb",
+    date: "Apr 1, 2026",
+    headline:
+      "Mid-Beach avg rent at $3,960 — up 2.9% YoY, outpacing metro average",
+    detail:
+      "Only 84 units in pipeline through 2027 while quarterly absorption remains strong. Vacancy at 3.5% is the tightest in 8 quarters.",
+    action:
+      "Value-add repositioning is the strongest play. Light reno ($8–12k/unit) supports 12–18% rent uplift. Target B-class assets with deferred capex.",
   },
   {
     id: 4,
-    type: "opportunity",
-    zip: "33140",
-    name: "Mid-Beach",
-    tag: "Vacancy Drop",
+    type: "permit",
+    zip: "33161",
+    name: "North Miami",
+    tag: "New Permit",
     tagColor: "#16a34a",
-    date: "Apr 1, 2026",
+    date: "Mar 30, 2026",
     headline:
-      "Mid-Beach vacancy at 3.5% — absorption outpacing pipeline for second consecutive quarter",
+      "54-unit mixed-use resi permitted at 1600 NE 125th St by NMB Capital",
     detail:
-      "Only 84 units in pipeline through 2027 while quarterly absorption remains strong.",
+      "First project to leverage the R4 upzone approved Feb 2026. 8-story design at $35/sf basis — well below coastal comps.",
     action:
-      "Value-add repositioning is strongest play. Light reno ($8–12k/unit) supports 12–18% rent uplift. Target B-class assets with deferred capex.",
+      "Immediate assemblage window on NE 125th. Density supports 80–100+ units/acre — first-mover advantage before market reprices.",
   },
   {
     id: 5,
-    type: "risk",
-    zip: "33141",
-    name: "North Beach",
-    tag: "Climate Overlay",
-    tagColor: "#d97706",
+    type: "permit",
+    zip: "33160",
+    name: "Sunny Isles",
+    tag: "New Permit",
+    tagColor: "#16a34a",
     date: "Mar 28, 2026",
     headline:
-      "MBRO climate overlay restricts ground-floor commercial use across 8 North Beach blocks",
+      "88-unit luxury rental tower permitted at 17501 Collins Ave by Atlantic Crest",
     detail:
-      "Miami Beach Resiliency Office expanded the flood/climate overlay zone, complicating mixed-use underwriting.",
+      "High-rise rental product on Collins Ave. International buyer pool remains strong. Pre-leasing expected Q1 2027.",
     action:
-      "Avoid retail-podium underwriting in flagged blocks. Focus on residential-only or elevated designs FEMA AE zone compliant.",
+      "Evaluate stabilized rental comps nearby. Adjacent parcels on Collins between 175th and 177th may see land-value lift.",
   },
   {
     id: 6,
-    type: "opportunity",
+    type: "rental",
     zip: "33154",
     name: "Surfside / Bal Harbour",
-    tag: "Vacancy Drop",
-    tagColor: "#16a34a",
+    tag: "Low Vacancy",
+    tagColor: "#f59e0b",
     date: "Mar 25, 2026",
     headline:
-      "Surfside vacancy falls to 3.2% — tightest in 3 years as Champlain rebuild timeline extends",
+      "Surfside vacancy at 3.2% — tightest in 3 years as limited pipeline persists",
     detail:
-      "Limited new supply and ongoing Champlain Towers site redevelopment delay keep the submarket undersupplied. Demand is absorbing existing units faster than replacement.",
+      "Only 52 units in pipeline through 2027. Demand absorbing existing units faster than replacement supply.",
     action:
-      "Target value-add acquisitions in the 95th–97th St corridor. Light renovation on older mid-rises can capture 15–20% rent premium vs. current in-place rents.",
+      "Target value-add acquisitions in the 95th–97th St corridor. Light renovation on older mid-rises can capture 15–20% rent premium.",
   },
   {
     id: 7,
-    type: "opportunity",
+    type: "permit",
     zip: "33167",
     name: "North Miami NW",
-    tag: "New Permit",
-    tagColor: "#2563eb",
+    tag: "Permit Filed",
+    tagColor: "#6366f1",
     date: "Mar 22, 2026",
     headline:
-      "72-unit workforce housing project permitted at 1200 NW 135th St with LIHTC allocation",
+      "72-unit workforce housing project filed at 1200 NW 135th St with LIHTC allocation",
     detail:
-      "Community Housing Group secured 9% LIHTC credits for a workforce MFR project. This signals county commitment to affordable pipeline in the corridor.",
+      "Community Housing Group secured 9% LIHTC credits. Signals county commitment to affordable pipeline in the corridor.",
     action:
-      "Evaluate LIHTC partnership or adjacent land banking for future affordable set-aside requirements. County incentives may expand to nearby parcels.",
+      "Evaluate LIHTC partnership or adjacent land banking. County incentives may expand to nearby parcels.",
   },
   {
     id: 8,
-    type: "opportunity",
+    type: "permit",
     zip: "33168",
     name: "North Miami Central",
-    tag: "Zoning Change",
-    tagColor: "#7c3aed",
+    tag: "New Permit",
+    tagColor: "#16a34a",
     date: "Mar 18, 2026",
     headline:
-      "MOCA Arts District overlay approved — mixed-use density bonus for NE 125th corridor parcels",
+      "64-unit mixed-use resi permitted at 13600 NE 6th Ave by NoMi Development",
     detail:
-      "City council approved a cultural overlay district providing FAR bonuses for projects incorporating ground-floor arts or community space along NE 125th St near MOCA.",
+      "Ground-floor retail with 7 stories of residential above. First mixed-use filing near MOCA Arts District in 18 months.",
     action:
-      "Assemble parcels within the overlay zone to leverage density bonus. Projects blending residential with arts/retail space qualify for expedited permitting.",
+      "Monitor lease-up velocity. Adjacent parcels on NE 6th Ave may see FAR bonus eligibility expand if arts overlay is formalized.",
   },
   {
     id: 9,
-    type: "risk",
-    zip: "33181",
-    name: "North Miami South",
-    tag: "Climate Overlay",
-    tagColor: "#d97706",
+    type: "rental",
+    zip: "33162",
+    name: "N. Miami NE",
+    tag: "Pipeline Alert",
+    tagColor: "#dc2626",
     date: "Mar 15, 2026",
     headline:
-      "Biscayne Park flood zone reclassification elevates insurance costs for properties south of 151st St",
+      "176 units in pipeline for 33162 — heaviest delivery calendar in the focus area",
     detail:
-      "FEMA preliminary maps reclassify portions of 33181 south of NE 151st St from Zone X to Zone AE, increasing flood insurance requirements.",
+      "Two large projects (112 + 64 units) targeting 2028 delivery. Vacancy already at 5.8%, the highest among covered ZIPs.",
     action:
-      "Factor elevated insurance premiums ($2–4k/unit annually) into acquisition underwriting for affected parcels. Elevated or post-2002 construction is less impacted.",
+      "Underwrite with conservative lease-up assumptions. Focus on basis discipline and phased value-add execution to avoid over-supply risk.",
+  },
+  {
+    id: 10,
+    type: "permit",
+    zip: "33181",
+    name: "North Miami South",
+    tag: "New Permit",
+    tagColor: "#16a34a",
+    date: "Mar 12, 2026",
+    headline:
+      "36-unit townhome cluster permitted at 1850 NE 135th St by BayPark Homes",
+    detail:
+      "Low-density infill on a 1.2-acre assemblage. Targets move-up renters priced out of Aventura. $425k–$550k per-door basis.",
+    action:
+      "Evaluate nearby lots for similar townhome-scale infill. Low pipeline (62 units) in 33181 supports limited supply thesis.",
   },
 ]

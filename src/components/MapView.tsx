@@ -24,6 +24,12 @@ const STATUS_COLORS: Record<string, string> = {
   "Under Review": "#6366f1",
 }
 
+const STATUS_ICONS: Record<string, string> = {
+  Permitted: "✓",
+  Pending: "●",
+  "Under Review": "◎",
+}
+
 function getBaseStyle(
   zipRecord: ZipRecord | undefined,
   isSelected: boolean,
@@ -37,80 +43,31 @@ function getBaseStyle(
   }
 }
 
-function buildTooltipHtml(
+function buildZipTooltipHtml(
   zip: string,
   zipRecord: ZipRecord | undefined,
 ): string {
   if (!zipRecord) {
     return `<div style="font-size:13px;font-weight:700">${zip}</div>`
   }
-
   const scoreMeta = getScoreMeta(zipRecord.score)
-
-  let projectsHtml = ""
-  for (const p of zipRecord.projects) {
-    const sc = STATUS_COLORS[p.status] ?? "#94a3b8"
-    projectsHtml += `<div style="display:flex;align-items:center;gap:4px;margin-top:3px">
-      <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${sc};flex-shrink:0"></span>
-      <span>${p.units} units &middot; ${p.type} &middot; <b>${p.status}</b></span>
-    </div>`
-  }
-
-  const permitted = zipRecord.projects.filter(
-    (p) => p.status === "Permitted",
-  ).length
-  const pending = zipRecord.projects.filter(
-    (p) => p.status === "Pending",
-  ).length
-  const underReview = zipRecord.projects.filter(
-    (p) => p.status === "Under Review",
-  ).length
-
-  let statusSummary = ""
-  if (permitted) statusSummary += `${permitted} Permitted`
-  if (pending)
-    statusSummary += `${statusSummary ? " · " : ""}${pending} Pending`
-  if (underReview)
-    statusSummary += `${statusSummary ? " · " : ""}${underReview} Under Review`
-
-  return `<div style="min-width:220px;max-width:300px">
+  return `<div style="min-width:180px">
     <div style="display:flex;align-items:center;gap:6px">
       <span style="font-size:14px;font-weight:700;color:#0f172a">${zip}</span>
-      <span style="background:${scoreMeta.color};color:#fff;border-radius:9999px;padding:2px 7px;font-size:9px;font-weight:600">${scoreMeta.label} &middot; ${zipRecord.score}</span>
+      <span style="background:${scoreMeta.color};color:#fff;border-radius:9999px;padding:2px 7px;font-size:9px;font-weight:600">${scoreMeta.label}</span>
     </div>
     <div style="font-size:11px;color:#64748b;margin-top:1px">${zipRecord.name}</div>
-
-    <div style="margin-top:7px;padding-top:7px;border-top:1px solid #e2e8f0">
-      <div style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#0f172a">
-        <span style="font-size:14px">🏗</span>
-        ${zipRecord.pipeline} units in pipeline
-      </div>
-      <div style="font-size:10px;color:#64748b;margin-top:2px">
-        ${zipRecord.permits} active permits &middot; ${statusSummary}
-      </div>
-      <div style="font-size:10px;color:#475569;margin-top:4px">${projectsHtml}</div>
-    </div>
-
-    <div style="margin-top:7px;padding-top:6px;border-top:1px solid #e2e8f0;font-size:10px;color:#64748b">
-      Avg rent ${formatCurrency(zipRecord.rent)} &middot; Vacancy ${zipRecord.vac}% &middot; Cap ${zipRecord.cap}%
+    <div style="margin-top:6px;font-size:10px;color:#334155">
+      Avg rent ${formatCurrency(zipRecord.rent)} · Vacancy ${zipRecord.vac}% · ${zipRecord.pipeline} units in pipeline
     </div>
   </div>`
 }
 
-function scalePipelineRadius(
-  pipeline: number,
-  min: number,
-  max: number,
-): number {
-  if (max === min) return 20
-  const t = (pipeline - min) / (max - min)
-  return 14 + t * 14
-}
-
-function getPipelineColor(pipeline: number): string {
-  if (pipeline >= 150) return "#dc2626"
-  if (pipeline >= 80) return "#f59e0b"
-  return "#3b82f6"
+function scalePermitRadius(units: number): number {
+  if (units >= 100) return 16
+  if (units >= 60) return 13
+  if (units >= 30) return 10
+  return 8
 }
 
 function ImperativeMap({
@@ -126,7 +83,7 @@ function ImperativeMap({
 }) {
   const map = useMap()
   const polygonLayerRef = useRef<L.GeoJSON | null>(null)
-  const bubblesLayerRef = useRef<L.LayerGroup | null>(null)
+  const markersLayerRef = useRef<L.LayerGroup | null>(null)
   const selectedRef = useRef(selectedZip)
   const selectZipRef = useRef(onSelectZip)
 
@@ -154,7 +111,7 @@ function ImperativeMap({
         const zip = feature.properties?.zip as string
         const zipRecord = zip ? zipsByCode.get(zip) : undefined
 
-        layer.bindTooltip(buildTooltipHtml(zip, zipRecord), {
+        layer.bindTooltip(buildZipTooltipHtml(zip, zipRecord), {
           sticky: true,
           direction: "top",
           offset: [0, -4],
@@ -190,72 +147,66 @@ function ImperativeMap({
 
     polygonLayerRef.current = polygons
 
-    const pipelines = Array.from(zipsByCode.values()).map((z) => z.pipeline)
-    const minPipeline = Math.min(...pipelines)
-    const maxPipeline = Math.max(...pipelines)
+    const markers = L.layerGroup()
 
-    const bubbles = L.layerGroup()
+    for (const [zip, zipRecord] of zipsByCode) {
+      for (const project of zipRecord.projects) {
+        const color = STATUS_COLORS[project.status] ?? "#94a3b8"
+        const icon = STATUS_ICONS[project.status] ?? "?"
+        const radius = scalePermitRadius(project.units)
+        const size = radius * 2
 
-    geoJson.features.forEach((feature) => {
-      const zip = feature.properties?.zip as string
-      const zipRecord = zip ? zipsByCode.get(zip) : undefined
-      if (!zipRecord) return
+        const divIcon = L.divIcon({
+          className: "permit-marker",
+          html: `<div class="permit-pin" style="width:${size}px;height:${size}px;background:${color}">
+            <span class="permit-icon">${icon}</span>
+          </div>
+          <div class="permit-label">${project.units}</div>`,
+          iconSize: [size, size + 14],
+          iconAnchor: [radius, radius],
+        })
 
-      const featureBounds = L.geoJSON(feature as GeoJsonObject).getBounds()
-      const center = featureBounds.getCenter()
-      const radius = scalePipelineRadius(
-        zipRecord.pipeline,
-        minPipeline,
-        maxPipeline,
-      )
-      const color = getPipelineColor(zipRecord.pipeline)
-      const size = radius * 2
-      const fontSize = Math.round(9 + ((radius - 14) / 14) * 4)
+        const tooltipHtml = `<div style="min-width:200px">
+          <div style="font-size:13px;font-weight:700;color:#0f172a">${project.addr}</div>
+          <div style="font-size:11px;color:#64748b">ZIP ${zip} · ${zipRecord.name}</div>
+          <div style="margin-top:6px;display:flex;align-items:center;gap:5px">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color}"></span>
+            <span style="font-size:11px;font-weight:600;color:#0f172a">${project.status}</span>
+          </div>
+          <div style="margin-top:5px;display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:10px">
+            <div><span style="color:#94a3b8">Units</span><br/><b style="color:#0f172a">${project.units}</b></div>
+            <div><span style="color:#94a3b8">Type</span><br/><b style="color:#0f172a">${project.type}</b></div>
+            <div><span style="color:#94a3b8">Developer</span><br/><b style="color:#0f172a">${project.dev}</b></div>
+            <div><span style="color:#94a3b8">Est. Delivery</span><br/><b style="color:#0f172a">${project.est}</b></div>
+          </div>
+        </div>`
 
-      let dotsHtml = ""
-      for (const p of zipRecord.projects) {
-        const sc = STATUS_COLORS[p.status] ?? "#94a3b8"
-        dotsHtml += `<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${sc};border:1px solid rgba(255,255,255,0.8)"></span>`
+        const marker = L.marker([project.lat, project.lng], {
+          icon: divIcon,
+          interactive: true,
+          zIndexOffset: project.units,
+        })
+
+        marker.bindTooltip(tooltipHtml, {
+          direction: "top",
+          offset: [0, -radius - 4],
+          opacity: 1,
+          className: "zip-tooltip",
+        })
+
+        marker.on("click", () => selectZipRef.current(zip))
+        marker.addTo(markers)
       }
+    }
 
-      const isHeavy = zipRecord.pipeline >= 150
-      const pulseClass = isHeavy ? " pipeline-pulse" : ""
-
-      const icon = L.divIcon({
-        className: "pipeline-marker",
-        html: `<div class="pipeline-bubble${pulseClass}" style="width:${size}px;height:${size}px;background:${color}">
-          <span class="pipeline-units" style="font-size:${fontSize}px">${zipRecord.pipeline}</span>
-          <div class="pipeline-dots">${dotsHtml}</div>
-        </div>`,
-        iconSize: [size, size],
-        iconAnchor: [radius, radius],
-      })
-
-      const marker = L.marker(center, {
-        icon,
-        interactive: true,
-        zIndexOffset: 1000 - zipRecord.pipeline,
-      })
-
-      marker.bindTooltip(buildTooltipHtml(zip, zipRecord), {
-        direction: "top",
-        offset: [0, -radius - 2],
-        opacity: 1,
-        className: "zip-tooltip",
-      })
-
-      marker.on("click", () => selectZipRef.current(zip))
-      marker.addTo(bubbles)
-    })
-
-    bubbles.addTo(map)
-    bubblesLayerRef.current = bubbles
+    markers.addTo(map)
+    markersLayerRef.current = markers
 
     return () => {
       map.removeLayer(polygons)
-      map.removeLayer(bubbles)
+      map.removeLayer(markers)
       polygonLayerRef.current = null
-      bubblesLayerRef.current = null
+      markersLayerRef.current = null
     }
   }, [geoJson, zipsByCode, map])
 
@@ -277,7 +228,7 @@ function ImperativeMap({
   return null
 }
 
-function PipelineLegend() {
+function PermitLegend() {
   const [collapsed, setCollapsed] = useState(false)
 
   if (collapsed) {
@@ -295,11 +246,11 @@ function PipelineLegend() {
   return (
     <div
       className="absolute bottom-16 right-3 z-[500] rounded-lg border border-[#e2e8f0] bg-white/95 p-3 shadow-md backdrop-blur-sm"
-      style={{ width: 210 }}
+      style={{ width: 200 }}
     >
       <div className="flex items-center justify-between">
         <div className="text-[11px] font-semibold text-[#0f172a]">
-          Pipeline Activity
+          Permit Markers
         </div>
         <button
           type="button"
@@ -310,57 +261,36 @@ function PipelineLegend() {
         </button>
       </div>
 
-      <div className="mt-2 flex items-end gap-1.5">
-        <div className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#94a3b8]">
-          <span className="text-[6px] font-bold text-white">S</span>
-        </div>
-        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#94a3b8]">
-          <span className="text-[7px] font-bold text-white">M</span>
-        </div>
-        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#94a3b8]">
-          <span className="text-[8px] font-bold text-white">L</span>
-        </div>
-        <span className="ml-1 text-[10px] text-[#64748b]">
-          Bubble size = units in pipeline
-        </span>
-      </div>
-
-      <div className="mt-2.5 space-y-1">
+      <div className="mt-2 space-y-1.5">
         <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#dc2626]" />
-          <span className="text-[10px] text-[#64748b]">Heavy (150+ units)</span>
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#16a34a] text-[8px] font-bold text-white">✓</span>
+          <span className="text-[10px] text-[#64748b]">Permitted</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]" />
-          <span className="text-[10px] text-[#64748b]">
-            Moderate (80–149)
-          </span>
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#f59e0b] text-[8px] font-bold text-white">●</span>
+          <span className="text-[10px] text-[#64748b]">Pending</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#3b82f6]" />
-          <span className="text-[10px] text-[#64748b]">
-            Light (&lt;80 units)
-          </span>
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#6366f1] text-[8px] font-bold text-white">◎</span>
+          <span className="text-[10px] text-[#64748b]">Under Review</span>
         </div>
       </div>
 
       <div className="mt-2.5 border-t border-[#e2e8f0] pt-2">
         <div className="text-[10px] font-medium text-[#334155]">
-          Permit Status
+          Marker Size
         </div>
-        <div className="mt-1 space-y-0.5">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#16a34a]" />
-            <span className="text-[10px] text-[#64748b]">Permitted</span>
+        <div className="mt-1 flex items-end gap-2">
+          <div className="flex h-4 w-4 items-center justify-center rounded-full bg-[#94a3b8]">
+            <span className="text-[6px] font-bold text-white">S</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#f59e0b]" />
-            <span className="text-[10px] text-[#64748b]">Pending</span>
+          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#94a3b8]">
+            <span className="text-[7px] font-bold text-white">M</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#6366f1]" />
-            <span className="text-[10px] text-[#64748b]">Under Review</span>
+          <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#94a3b8]">
+            <span className="text-[8px] font-bold text-white">L</span>
           </div>
+          <span className="ml-0.5 text-[10px] text-[#64748b]">= unit count</span>
         </div>
       </div>
     </div>
@@ -427,7 +357,7 @@ export function MapView({
       )}
 
       <ZipList zips={zips} selectedZip={selectedZip} onSelectZip={onSelectZip} />
-      <PipelineLegend />
+      <PermitLegend />
 
       <ZipDetailPanel
         zipRecord={selectedRecord}

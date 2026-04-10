@@ -5,12 +5,12 @@ type SignalsViewProps = {
   signals: SignalRecord[]
 }
 
-type SignalFilter = "all" | "opportunity" | "risk"
+type SignalFilter = "all" | "permit" | "rental"
 
 const FILTERS: { id: SignalFilter; label: string }[] = [
   { id: "all", label: "All" },
-  { id: "opportunity", label: "Opportunities" },
-  { id: "risk", label: "Risk Alerts" },
+  { id: "permit", label: "Permits" },
+  { id: "rental", label: "Rental" },
 ]
 
 export function SignalsView({ signals }: SignalsViewProps) {
@@ -34,7 +34,7 @@ export function SignalsView({ signals }: SignalsViewProps) {
           <div>
             <h2 className="text-xl font-semibold text-[#0f172a]">Signals Feed</h2>
             <p className="text-sm text-[#64748b]">
-              Market intelligence and risk flags across focus ZIP codes.
+              Permit activity and rental market signals across focus ZIP codes.
             </p>
           </div>
           <div className="grid grid-cols-3 gap-1 rounded-lg border border-[#e2e8f0] bg-white p-1 text-xs">
@@ -74,9 +74,9 @@ export function SignalsView({ signals }: SignalsViewProps) {
               <p className="mt-1 text-sm text-[#64748b]">{signal.detail}</p>
               <div
                 className={`mt-3 rounded-md border p-3 text-sm ${
-                  signal.type === "opportunity"
+                  signal.type === "permit"
                     ? "border-[#bbf7d0] bg-[#f0fdf4] text-[#166534]"
-                    : "border-[#fed7aa] bg-[#fffbeb] text-[#9a3412]"
+                    : "border-[#bfdbfe] bg-[#eff6ff] text-[#1e40af]"
                 }`}
               >
                 <div className="text-xs font-semibold uppercase tracking-wide">

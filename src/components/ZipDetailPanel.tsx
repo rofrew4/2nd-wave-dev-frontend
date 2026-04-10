@@ -315,9 +315,9 @@ export function ZipDetailPanel({
                   <p className="mt-1 text-[11px] text-[#64748b]">{signal.detail}</p>
                   <div
                     className={`mt-2 rounded-md border p-2 text-[11px] ${
-                      signal.type === "opportunity"
+                      signal.type === "permit"
                         ? "border-[#bbf7d0] bg-[#f0fdf4] text-[#166534]"
-                        : "border-[#fed7aa] bg-[#fffbeb] text-[#9a3412]"
+                        : "border-[#bfdbfe] bg-[#eff6ff] text-[#1e40af]"
                     }`}
                   >
                     <p className="font-semibold">Recommended Action</p>

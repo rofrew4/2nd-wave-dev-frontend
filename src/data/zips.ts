@@ -50,7 +50,7 @@ export const ZIPS: ZipRecord[] = [
   { zip: "33181", name: "North Miami South", hood: "City of North Miami — South / Biscayne Park", score: 72, rent: 2620, rg: 1.8, qg: 0.8, vac: 4.9, cap: 5.2, rbt: { Studio: 1450, "1 BR": 2050, "2 BR": 2750, "3 BR": 3500 }, insight: "Quieter residential pocket bordering Biscayne Park. Sleeper for small-scale multifamily and townhome infill." },
 ]
 
-export const PERMITS: Permit[] = [
+const CURRENT_PERMITS: Permit[] = [
   // === NEW CONSTRUCTION / FOUNDATION ===
   { id: "nc-1", zip: "33139", addr: "430 W 41st St", lat: 25.8125, lng: -80.1405, units: 104, type: "Class A MFR", category: "new-construction", status: "Under Review", dev: "Rockpoint Group", est: "Q2 2027", filed: "2026-04-02" },
   { id: "nc-2", zip: "33139", addr: "1428 Ocean Dr", lat: 25.7855, lng: -80.1301, units: 62, type: "Luxury Rental", category: "new-construction", status: "Permitted", dev: "Terra Group", est: "Q3 2026", filed: "2026-03-15" },
@@ -102,92 +102,279 @@ export const PERMITS: Permit[] = [
   { id: "rv-14", zip: "33109", addr: "7 Fisher Island Dr", lat: 25.7628, lng: -80.1440, units: 12, type: "Luxury Rehab", category: "renovation", status: "Permitted", dev: "Fisher Island Holdings", est: "Q3 2026", filed: "2026-01-15" },
   { id: "rv-15", zip: "33139", addr: "1500 Bay Rd", lat: 25.7890, lng: -80.1395, units: 68, type: "Full Rehab — Class B to A", category: "renovation", status: "Pending", dev: "Lincoln Property", est: "Q1 2027", filed: "2026-04-09" },
   { id: "rv-16", zip: "33162", addr: "1900 NE 164th St", lat: 25.9290, lng: -80.1620, units: 34, type: "Interior + Amenity Rehab", category: "renovation", status: "Pending", dev: "Priderock Capital", est: "Q2 2027", filed: "2026-03-28" },
-
-  // === HISTORICAL PERMITS (2024-Q2 through 2025-Q4) ===
-  // 2024-Q2
-  { id: "h-1", zip: "33139", addr: "520 Collins Ave", lat: 25.7780, lng: -80.1315, units: 72, type: "Class A MFR", category: "new-construction", status: "Permitted", dev: "Related Group", est: "Q2 2026", filed: "2024-04-12" },
-  { id: "h-2", zip: "33140", addr: "4200 Indian Creek Dr", lat: 25.8195, lng: -80.1290, units: 36, type: "Boutique Luxury Resi", category: "new-construction", status: "Permitted", dev: "Setai Dev", est: "Q4 2025", filed: "2024-04-22" },
-  { id: "h-3", zip: "33141", addr: "7200 Collins Ave", lat: 25.8470, lng: -80.1218, units: 48, type: "Mid-Rise Resi", category: "new-construction", status: "Permitted", dev: "Coastal Builders", est: "Q1 2026", filed: "2024-05-05" },
-  { id: "h-4", zip: "33161", addr: "1400 NE 123rd St", lat: 25.8875, lng: -80.1710, units: 80, type: "Garden-Style MFR", category: "new-construction", status: "Permitted", dev: "Keystone Partners", est: "Q3 2025", filed: "2024-05-18" },
-  { id: "h-5", zip: "33139", addr: "900 Lincoln Rd", lat: 25.7905, lng: -80.1370, units: 30, type: "Retail-to-Resi", category: "conversion", status: "Permitted", dev: "Crescent Heights", est: "Q2 2025", filed: "2024-04-30" },
-  { id: "h-6", zip: "33160", addr: "17200 Collins Ave", lat: 25.9345, lng: -80.1225, units: 60, type: "Hotel-to-Condo", category: "conversion", status: "Permitted", dev: "Dezer Development", est: "Q4 2025", filed: "2024-06-10" },
-  { id: "h-7", zip: "33162", addr: "15100 NE 18th Ave", lat: 25.9165, lng: -80.1580, units: 88, type: "Full Rehab — Repositioning", category: "renovation", status: "Permitted", dev: "Morgan Properties", est: "Q1 2026", filed: "2024-06-22" },
-  { id: "h-8", zip: "33167", addr: "1300 NW 131st St", lat: 25.8960, lng: -80.2045, units: 56, type: "Full Rehab — Workforce", category: "renovation", status: "Permitted", dev: "Housing Trust Group", est: "Q3 2025", filed: "2024-05-14" },
-  { id: "h-9", zip: "33109", addr: "5 Fisher Island Dr", lat: 25.7630, lng: -80.1435, units: 22, type: "Ultra-Luxury Condo", category: "new-construction", status: "Permitted", dev: "Fisher Island Dev", est: "Q1 2026", filed: "2024-06-01" },
-
-  // 2024-Q3
-  { id: "h-10", zip: "33139", addr: "1550 Meridian Ave", lat: 25.7870, lng: -80.1365, units: 44, type: "Class A MFR", category: "new-construction", status: "Permitted", dev: "Terra Group", est: "Q4 2025", filed: "2024-07-08" },
-  { id: "h-11", zip: "33154", addr: "9200 Collins Ave", lat: 25.8700, lng: -80.1225, units: 32, type: "Boutique Luxury Resi", category: "new-construction", status: "Permitted", dev: "Surf Club Dev", est: "Q2 2026", filed: "2024-07-22" },
-  { id: "h-12", zip: "33160", addr: "18200 Collins Ave", lat: 25.9400, lng: -80.1235, units: 96, type: "Luxury Rental Tower", category: "new-construction", status: "Permitted", dev: "Atlantic Crest", est: "Q1 2026", filed: "2024-08-05" },
-  { id: "h-13", zip: "33168", addr: "13400 NE 5th Ave", lat: 25.8955, lng: -80.1795, units: 52, type: "Mixed-Use Resi", category: "new-construction", status: "Permitted", dev: "NoMi Development", est: "Q4 2025", filed: "2024-08-18" },
-  { id: "h-14", zip: "33181", addr: "1700 NE 137th St", lat: 25.9005, lng: -80.1640, units: 28, type: "Townhome Cluster", category: "new-construction", status: "Permitted", dev: "BayPark Homes", est: "Q3 2025", filed: "2024-07-15" },
-  { id: "h-15", zip: "33140", addr: "4600 Sheridan Ave", lat: 25.8225, lng: -80.1310, units: 24, type: "Office-to-Resi", category: "conversion", status: "Permitted", dev: "Mast Capital", est: "Q1 2026", filed: "2024-08-25" },
-  { id: "h-16", zip: "33141", addr: "6500 Indian Creek Dr", lat: 25.8430, lng: -80.1240, units: 34, type: "Hotel-to-Resi", category: "conversion", status: "Permitted", dev: "North Beach Partners", est: "Q3 2025", filed: "2024-09-02" },
-  { id: "h-17", zip: "33139", addr: "1700 Alton Rd", lat: 25.7895, lng: -80.1410, units: 64, type: "Full Rehab — Class B to A", category: "renovation", status: "Permitted", dev: "Aimco", est: "Q2 2025", filed: "2024-07-30" },
-  { id: "h-18", zip: "33161", addr: "12300 NE 10th Ave", lat: 25.8860, lng: -80.1665, units: 48, type: "Interior Rehab — Value-Add", category: "renovation", status: "Permitted", dev: "Blackstone RE", est: "Q4 2025", filed: "2024-09-12" },
-
-  // 2024-Q4
-  { id: "h-19", zip: "33139", addr: "1900 Purdy Ave", lat: 25.7910, lng: -80.1425, units: 38, type: "Mixed-Use Resi", category: "new-construction", status: "Permitted", dev: "Rockpoint Group", est: "Q2 2026", filed: "2024-10-05" },
-  { id: "h-20", zip: "33162", addr: "2100 NE 162nd St", lat: 25.9270, lng: -80.1615, units: 104, type: "Workforce MFR", category: "new-construction", status: "Permitted", dev: "Sunline Housing", est: "Q1 2027", filed: "2024-10-20" },
-  { id: "h-21", zip: "33167", addr: "800 NW 125th St", lat: 25.8855, lng: -80.2020, units: 60, type: "Workforce MFR", category: "new-construction", status: "Permitted", dev: "Community Housing Group", est: "Q3 2026", filed: "2024-11-08" },
-  { id: "h-22", zip: "33168", addr: "13800 NE 8th Ave", lat: 25.8975, lng: -80.1780, units: 40, type: "Class B+ MFR", category: "new-construction", status: "Permitted", dev: "Pinnacle Urban", est: "Q4 2026", filed: "2024-11-22" },
-  { id: "h-23", zip: "33160", addr: "17800 N Bay Rd", lat: 25.9375, lng: -80.1305, units: 42, type: "Hotel-to-Condo", category: "conversion", status: "Permitted", dev: "Harborline Partners", est: "Q2 2026", filed: "2024-10-15" },
-  { id: "h-24", zip: "33154", addr: "9700 Harding Ave", lat: 25.8740, lng: -80.1250, units: 20, type: "Retail-to-Resi", category: "conversion", status: "Permitted", dev: "Bal Harbour Group", est: "Q1 2026", filed: "2024-12-02" },
-  { id: "h-25", zip: "33161", addr: "12700 NE 7th Ave", lat: 25.8900, lng: -80.1690, units: 36, type: "Warehouse-to-Resi", category: "conversion", status: "Permitted", dev: "Urban Core Dev", est: "Q3 2026", filed: "2024-11-18" },
-  { id: "h-26", zip: "33140", addr: "4000 Royal Palm Ave", lat: 25.8185, lng: -80.1335, units: 28, type: "Interior Rehab — Value-Add", category: "renovation", status: "Permitted", dev: "Starwood Capital", est: "Q2 2025", filed: "2024-10-28" },
-  { id: "h-27", zip: "33141", addr: "7400 Byron Ave", lat: 25.8495, lng: -80.1265, units: 52, type: "Full Rehab — Repositioning", category: "renovation", status: "Permitted", dev: "Greystar", est: "Q4 2025", filed: "2024-12-15" },
-
-  // 2025-Q1
-  { id: "h-28", zip: "33139", addr: "1100 West Ave", lat: 25.7845, lng: -80.1405, units: 56, type: "Class A MFR", category: "new-construction", status: "Permitted", dev: "Terra Group", est: "Q3 2026", filed: "2025-01-10" },
-  { id: "h-29", zip: "33140", addr: "4300 Alton Rd", lat: 25.8210, lng: -80.1350, units: 34, type: "Boutique Luxury Resi", category: "new-construction", status: "Permitted", dev: "Beach Capital", est: "Q1 2027", filed: "2025-01-28" },
-  { id: "h-30", zip: "33160", addr: "19200 Collins Ave", lat: 25.9445, lng: -80.1230, units: 76, type: "Mid-Rise MFR", category: "new-construction", status: "Permitted", dev: "Atlantic Crest", est: "Q4 2026", filed: "2025-02-12" },
-  { id: "h-31", zip: "33161", addr: "1100 NE 126th St", lat: 25.8910, lng: -80.1755, units: 64, type: "Mixed-Use Resi", category: "new-construction", status: "Permitted", dev: "NMB Capital", est: "Q2 2027", filed: "2025-02-25" },
-  { id: "h-32", zip: "33181", addr: "1600 NE 142nd St", lat: 25.9048, lng: -80.1650, units: 30, type: "Boutique Resi", category: "new-construction", status: "Permitted", dev: "SilverLine Dev", est: "Q1 2027", filed: "2025-03-08" },
-  { id: "h-33", zip: "33139", addr: "750 5th St", lat: 25.7720, lng: -80.1325, units: 26, type: "Hotel-to-Resi", category: "conversion", status: "Permitted", dev: "Shvo Group", est: "Q4 2026", filed: "2025-01-20" },
-  { id: "h-34", zip: "33140", addr: "4500 Prairie Ave", lat: 25.8215, lng: -80.1340, units: 22, type: "Office-to-Resi", category: "conversion", status: "Permitted", dev: "Fontainebleau Development", est: "Q3 2026", filed: "2025-03-15" },
-  { id: "h-35", zip: "33162", addr: "14700 NE 16th Ave", lat: 25.9140, lng: -80.1570, units: 42, type: "Systems Upgrade + Reno", category: "renovation", status: "Permitted", dev: "Morgan Properties", est: "Q2 2026", filed: "2025-02-05" },
-  { id: "h-36", zip: "33167", addr: "1050 NW 130th St", lat: 25.8950, lng: -80.2035, units: 68, type: "Full Rehab — Workforce", category: "renovation", status: "Permitted", dev: "Housing Trust Group", est: "Q4 2026", filed: "2025-03-20" },
-
-  // 2025-Q2
-  { id: "h-37", zip: "33139", addr: "1300 Ocean Dr", lat: 25.7835, lng: -80.1298, units: 50, type: "Luxury Rental", category: "new-construction", status: "Permitted", dev: "Rockpoint Group", est: "Q4 2026", filed: "2025-04-08" },
-  { id: "h-38", zip: "33141", addr: "6800 Harding Ave", lat: 25.8445, lng: -80.1270, units: 38, type: "Mid-Rise Resi", category: "new-construction", status: "Permitted", dev: "Ocean Ventures", est: "Q2 2027", filed: "2025-04-22" },
-  { id: "h-39", zip: "33154", addr: "9300 Abbott Ave", lat: 25.8695, lng: -80.1260, units: 24, type: "Boutique Luxury Resi", category: "new-construction", status: "Permitted", dev: "Harbour Capital", est: "Q3 2027", filed: "2025-05-10" },
-  { id: "h-40", zip: "33162", addr: "2000 NE 160th St", lat: 25.9255, lng: -80.1610, units: 90, type: "Mixed-Income Resi", category: "new-construction", status: "Permitted", dev: "Gateway Urban", est: "Q1 2027", filed: "2025-05-28" },
-  { id: "h-41", zip: "33168", addr: "13000 NE 3rd Ave", lat: 25.8930, lng: -80.1810, units: 44, type: "Mixed-Use Resi", category: "new-construction", status: "Permitted", dev: "NoMi Development", est: "Q4 2026", filed: "2025-06-15" },
-  { id: "h-42", zip: "33160", addr: "16900 Collins Ave", lat: 25.9330, lng: -80.1222, units: 28, type: "Hotel-to-Condo", category: "conversion", status: "Permitted", dev: "Dezer Development", est: "Q1 2027", filed: "2025-04-15" },
-  { id: "h-43", zip: "33161", addr: "1050 NE 124th St", lat: 25.8885, lng: -80.1745, units: 32, type: "Warehouse-to-Resi", category: "conversion", status: "Permitted", dev: "Urban Core Dev", est: "Q3 2026", filed: "2025-06-05" },
-  { id: "h-44", zip: "33139", addr: "1450 Drexel Ave", lat: 25.7868, lng: -80.1340, units: 40, type: "Full Rehab — Class B to A", category: "renovation", status: "Permitted", dev: "Related Group", est: "Q2 2026", filed: "2025-05-02" },
-  { id: "h-45", zip: "33181", addr: "1400 NE 138th St", lat: 25.9000, lng: -80.1638, units: 26, type: "Interior Rehab — Value-Add", category: "renovation", status: "Permitted", dev: "Alliance Residential", est: "Q1 2027", filed: "2025-06-22" },
-
-  // 2025-Q3
-  { id: "h-46", zip: "33140", addr: "4800 Collins Ave", lat: 25.8235, lng: -80.1270, units: 58, type: "Class A MFR", category: "new-construction", status: "Permitted", dev: "Setai Dev", est: "Q1 2027", filed: "2025-07-10" },
-  { id: "h-47", zip: "33161", addr: "12600 NE 12th Ave", lat: 25.8895, lng: -80.1660, units: 84, type: "Garden-Style MFR", category: "new-construction", status: "Permitted", dev: "Keystone Partners", est: "Q3 2027", filed: "2025-07-28" },
-  { id: "h-48", zip: "33109", addr: "3 Fisher Island Dr", lat: 25.7633, lng: -80.1438, units: 16, type: "Ultra-Luxury Condo", category: "new-construction", status: "Permitted", dev: "Fisher Island Dev", est: "Q2 2027", filed: "2025-08-12" },
-  { id: "h-49", zip: "33167", addr: "900 NW 128th St", lat: 25.8925, lng: -80.2025, units: 48, type: "Workforce MFR", category: "new-construction", status: "Permitted", dev: "Community Housing Group", est: "Q2 2027", filed: "2025-08-25" },
-  { id: "h-50", zip: "33162", addr: "15500 NE 22nd Ave", lat: 25.9185, lng: -80.1565, units: 72, type: "Workforce MFR", category: "new-construction", status: "Permitted", dev: "Sunline Housing", est: "Q4 2027", filed: "2025-09-08" },
-  { id: "h-51", zip: "33141", addr: "6100 Collins Ave", lat: 25.8390, lng: -80.1228, units: 20, type: "Retail-to-Resi", category: "conversion", status: "Permitted", dev: "North Beach Partners", est: "Q1 2027", filed: "2025-07-18" },
-  { id: "h-52", zip: "33154", addr: "9500 Harding Ave", lat: 25.8730, lng: -80.1248, units: 18, type: "Hotel-to-Resi", category: "conversion", status: "Permitted", dev: "Surf Club Dev", est: "Q3 2026", filed: "2025-09-20" },
-  { id: "h-53", zip: "33160", addr: "17600 N Bay Rd", lat: 25.9370, lng: -80.1308, units: 54, type: "Systems Upgrade + Reno", category: "renovation", status: "Permitted", dev: "Turnberry Associates", est: "Q2 2026", filed: "2025-08-02" },
-  { id: "h-54", zip: "33168", addr: "13500 NE 7th Ave", lat: 25.8960, lng: -80.1790, units: 36, type: "Envelope + Amenity Add", category: "renovation", status: "Permitted", dev: "Zenith Capital", est: "Q4 2026", filed: "2025-09-15" },
-
-  // 2025-Q4
-  { id: "h-55", zip: "33139", addr: "1650 Bay Rd", lat: 25.7900, lng: -80.1398, units: 66, type: "Class A MFR", category: "new-construction", status: "Permitted", dev: "Terra Group", est: "Q2 2027", filed: "2025-10-05" },
-  { id: "h-56", zip: "33140", addr: "3800 Meridian Ave", lat: 25.8170, lng: -80.1320, units: 40, type: "Boutique Luxury Resi", category: "new-construction", status: "Permitted", dev: "Beach Capital", est: "Q4 2027", filed: "2025-10-22" },
-  { id: "h-57", zip: "33160", addr: "18500 Collins Ave", lat: 25.9415, lng: -80.1240, units: 110, type: "Luxury Rental Tower", category: "new-construction", status: "Permitted", dev: "Atlantic Crest", est: "Q2 2027", filed: "2025-11-10" },
-  { id: "h-58", zip: "33161", addr: "1500 NE 127th St", lat: 25.8920, lng: -80.1735, units: 52, type: "Mixed-Use Resi", category: "new-construction", status: "Permitted", dev: "NMB Capital", est: "Q3 2027", filed: "2025-11-28" },
-  { id: "h-59", zip: "33162", addr: "14300 NE 19th Ave", lat: 25.9120, lng: -80.1560, units: 68, type: "Mixed-Income Resi", category: "new-construction", status: "Permitted", dev: "Gateway Urban", est: "Q1 2028", filed: "2025-12-08" },
-  { id: "h-60", zip: "33181", addr: "1900 NE 144th St", lat: 25.9065, lng: -80.1655, units: 32, type: "Townhome Cluster", category: "new-construction", status: "Permitted", dev: "BayPark Homes", est: "Q4 2027", filed: "2025-12-20" },
-  { id: "h-61", zip: "33139", addr: "800 Washington Ave", lat: 25.7785, lng: -80.1340, units: 36, type: "Hotel-to-Resi", category: "conversion", status: "Permitted", dev: "Brickman RE", est: "Q3 2026", filed: "2025-10-15" },
-  { id: "h-62", zip: "33140", addr: "4100 Sheridan Ave", lat: 25.8190, lng: -80.1315, units: 22, type: "Office-to-Resi", category: "conversion", status: "Permitted", dev: "Mast Capital", est: "Q2 2027", filed: "2025-11-20" },
-  { id: "h-63", zip: "33167", addr: "1150 NW 133rd St", lat: 25.8965, lng: -80.2048, units: 46, type: "Full Rehab — Workforce", category: "renovation", status: "Permitted", dev: "Housing Trust Group", est: "Q1 2027", filed: "2025-10-30" },
-  { id: "h-64", zip: "33141", addr: "7000 Harding Ave", lat: 25.8460, lng: -80.1275, units: 40, type: "Full Rehab — Repositioning", category: "renovation", status: "Permitted", dev: "Greystar", est: "Q3 2026", filed: "2025-11-05" },
-  { id: "h-65", zip: "33109", addr: "10 Fisher Island Dr", lat: 25.7635, lng: -80.1442, units: 14, type: "Luxury Rehab", category: "renovation", status: "Permitted", dev: "Fisher Island Holdings", est: "Q2 2026", filed: "2025-12-12" },
-  { id: "h-66", zip: "33154", addr: "9100 Collins Ave", lat: 25.8690, lng: -80.1222, units: 30, type: "Interior Rehab", category: "renovation", status: "Permitted", dev: "One Sotheby's Dev", est: "Q4 2026", filed: "2025-12-28" },
-
-  // 2026-Q1 (early, before the existing current permits)
-  { id: "h-67", zip: "33168", addr: "13100 NE 2nd Ave", lat: 25.8935, lng: -80.1815, units: 38, type: "Class B+ MFR", category: "new-construction", status: "Permitted", dev: "Pinnacle Urban", est: "Q3 2027", filed: "2026-01-05" },
-  { id: "h-68", zip: "33162", addr: "15800 NE 21st Ave", lat: 25.9195, lng: -80.1572, units: 82, type: "Workforce MFR", category: "new-construction", status: "Permitted", dev: "Sunline Housing", est: "Q1 2028", filed: "2026-01-18" },
-  { id: "h-69", zip: "33160", addr: "17300 Collins Ave", lat: 25.9350, lng: -80.1226, units: 46, type: "Hotel-to-Condo", category: "conversion", status: "Permitted", dev: "Dezer Development", est: "Q4 2027", filed: "2026-01-25" },
-  { id: "h-70", zip: "33139", addr: "1400 Euclid Ave", lat: 25.7858, lng: -80.1335, units: 58, type: "Full Rehab — Class B to A", category: "renovation", status: "Permitted", dev: "Lincoln Property", est: "Q3 2026", filed: "2026-01-12" },
-  { id: "h-71", zip: "33161", addr: "12900 NE 9th Ave", lat: 25.8910, lng: -80.1675, units: 44, type: "Interior Rehab — Value-Add", category: "renovation", status: "Permitted", dev: "Cortland", est: "Q2 2027", filed: "2026-02-01" },
 ]
+
+type ZipProfile = {
+  zip: string
+  minPerMonth: number
+  maxPerMonth: number
+  trend: "rising" | "declining" | "steady" | "sharp-rise"
+  ncWeight: number
+  cvWeight: number
+  rvWeight: number
+  latCenter: number
+  lngCenter: number
+  latSpread: number
+  lngSpread: number
+  streets: string[]
+  developers: string[]
+  ncTypes: string[]
+  cvTypes: string[]
+  rvTypes: string[]
+}
+
+const ZIP_PROFILES: ZipProfile[] = [
+  {
+    zip: "33139", minPerMonth: 15, maxPerMonth: 25, trend: "rising",
+    ncWeight: 0.40, cvWeight: 0.30, rvWeight: 0.30,
+    latCenter: 25.7850, lngCenter: -80.1350, latSpread: 0.015, lngSpread: 0.008,
+    streets: ["Collins Ave", "Ocean Dr", "Washington Ave", "Alton Rd", "West Ave", "Meridian Ave", "Bay Rd", "Euclid Ave", "Drexel Ave", "Purdy Ave", "Lincoln Rd", "Espanola Way", "5th St", "14th St", "21st St"],
+    developers: ["Terra Group", "Rockpoint Group", "Related Group", "Crescent Heights", "Shvo Group", "Brickman RE", "Lincoln Property", "Aimco"],
+    ncTypes: ["Class A MFR", "Luxury Rental", "Mixed-Use Resi", "Boutique Luxury Resi"],
+    cvTypes: ["Hotel-to-Resi", "Retail-to-Resi", "Hotel-to-Condo"],
+    rvTypes: ["Full Rehab — Class B to A", "Systems Upgrade + Amenity", "Interior Rehab — Value-Add"],
+  },
+  {
+    zip: "33140", minPerMonth: 10, maxPerMonth: 18, trend: "steady",
+    ncWeight: 0.35, cvWeight: 0.30, rvWeight: 0.35,
+    latCenter: 25.8200, lngCenter: -80.1300, latSpread: 0.008, lngSpread: 0.006,
+    streets: ["Collins Ave", "Indian Creek Dr", "Pine Tree Dr", "Alton Rd", "Sheridan Ave", "Prairie Ave", "Royal Palm Ave", "Meridian Ave"],
+    developers: ["Setai Dev", "Beach Capital", "Fontainebleau Development", "Mast Capital", "Starwood Capital"],
+    ncTypes: ["Boutique Luxury Resi", "Class A MFR", "Luxury MFR", "Mid-Rise Resi"],
+    cvTypes: ["Hotel-to-Resi", "Office-to-Resi", "Retail-to-Resi"],
+    rvTypes: ["Interior Rehab — Value-Add", "Full Rehab — Repositioning", "Envelope + MEP Upgrade"],
+  },
+  {
+    zip: "33141", minPerMonth: 8, maxPerMonth: 15, trend: "rising",
+    ncWeight: 0.40, cvWeight: 0.25, rvWeight: 0.35,
+    latCenter: 25.8450, lngCenter: -80.1245, latSpread: 0.010, lngSpread: 0.005,
+    streets: ["Collins Ave", "Harding Ave", "Byron Ave", "Indian Creek Dr", "Abbott Ave", "Carlyle Ave"],
+    developers: ["Ocean Ventures", "Coastal Builders", "North Beach Partners", "Greystar", "Bridge Investment"],
+    ncTypes: ["Class A MFR", "Mid-Rise Resi", "Garden-Style MFR"],
+    cvTypes: ["Retail-to-Resi", "Hotel-to-Resi"],
+    rvTypes: ["Full Rehab — Repositioning", "Envelope + MEP Upgrade", "Interior Rehab"],
+  },
+  {
+    zip: "33154", minPerMonth: 5, maxPerMonth: 10, trend: "steady",
+    ncWeight: 0.30, cvWeight: 0.25, rvWeight: 0.45,
+    latCenter: 25.8715, lngCenter: -80.1240, latSpread: 0.005, lngSpread: 0.004,
+    streets: ["Collins Ave", "Harding Ave", "Abbott Ave", "96th St", "Bal Bay Dr"],
+    developers: ["Surf Club Dev", "Harbour Capital", "Bal Harbour Group", "One Sotheby's Dev"],
+    ncTypes: ["Boutique Luxury Resi", "Mid-Rise Resi"],
+    cvTypes: ["Retail-to-Resi", "Hotel-to-Resi"],
+    rvTypes: ["Interior Rehab", "Full Rehab — Repositioning", "Envelope + Amenity Add"],
+  },
+  {
+    zip: "33160", minPerMonth: 12, maxPerMonth: 22, trend: "declining",
+    ncWeight: 0.40, cvWeight: 0.25, rvWeight: 0.35,
+    latCenter: 25.9380, lngCenter: -80.1260, latSpread: 0.010, lngSpread: 0.008,
+    streets: ["Collins Ave", "N Bay Rd", "Sunny Isles Blvd", "Ocean Blvd", "Atlantic Blvd", "Golden Beach Dr"],
+    developers: ["Atlantic Crest", "Harborline Partners", "Dezer Development", "Turnberry Associates"],
+    ncTypes: ["Luxury Rental Tower", "Mid-Rise MFR", "Class A MFR"],
+    cvTypes: ["Hotel-to-Condo", "Hotel-to-Resi"],
+    rvTypes: ["Systems Upgrade + Reno", "Full Rehab — Repositioning", "Interior Rehab — Value-Add"],
+  },
+  {
+    zip: "33161", minPerMonth: 10, maxPerMonth: 18, trend: "sharp-rise",
+    ncWeight: 0.45, cvWeight: 0.20, rvWeight: 0.35,
+    latCenter: 25.8895, lngCenter: -80.1720, latSpread: 0.008, lngSpread: 0.008,
+    streets: ["NE 125th St", "NE 6th Ave", "NE 8th Ave", "NE 10th Ave", "NE 123rd St", "NE 126th St", "NE 127th St", "NE 12th Ave", "NE 7th Ave", "NE 9th Ave"],
+    developers: ["NMB Capital", "Keystone Partners", "Urban Core Dev", "Blackstone RE", "Cortland"],
+    ncTypes: ["Mixed-Use Resi", "Garden-Style MFR", "Class A MFR"],
+    cvTypes: ["Warehouse-to-Resi", "Retail-to-Resi"],
+    rvTypes: ["Full Rehab — Value-Add", "Interior Rehab — Value-Add", "Interior Rehab"],
+  },
+  {
+    zip: "33162", minPerMonth: 8, maxPerMonth: 14, trend: "steady",
+    ncWeight: 0.40, cvWeight: 0.15, rvWeight: 0.45,
+    latCenter: 25.9200, lngCenter: -80.1590, latSpread: 0.010, lngSpread: 0.006,
+    streets: ["NE 20th Ave", "NE 163rd St", "NE 18th Ave", "NE 22nd Ave", "NE 162nd St", "NE 160th St", "NE 164th St", "NE 16th Ave", "NE 19th Ave", "NE 21st Ave"],
+    developers: ["Sunline Housing", "Gateway Urban", "Morgan Properties", "Priderock Capital"],
+    ncTypes: ["Workforce MFR", "Mixed-Income Resi", "Garden-Style MFR"],
+    cvTypes: ["Retail-to-Resi", "Office-to-Resi"],
+    rvTypes: ["Full Rehab — Repositioning", "Systems Upgrade + Reno", "Interior + Amenity Rehab"],
+  },
+  {
+    zip: "33167", minPerMonth: 4, maxPerMonth: 8, trend: "rising",
+    ncWeight: 0.45, cvWeight: 0.05, rvWeight: 0.50,
+    latCenter: 25.8940, lngCenter: -80.2035, latSpread: 0.008, lngSpread: 0.005,
+    streets: ["NW 135th St", "NW 119th St", "NW 131st St", "NW 125th St", "NW 130th St", "NW 128th St", "NW 133rd St", "NW 132nd St"],
+    developers: ["Community Housing Group", "Greenway Partners", "Housing Trust Group"],
+    ncTypes: ["Workforce MFR", "Garden-Style MFR"],
+    cvTypes: ["Warehouse-to-Resi"],
+    rvTypes: ["Full Rehab — Workforce", "Interior Rehab", "Systems Upgrade + Reno"],
+  },
+  {
+    zip: "33168", minPerMonth: 6, maxPerMonth: 12, trend: "rising",
+    ncWeight: 0.40, cvWeight: 0.15, rvWeight: 0.45,
+    latCenter: 25.8950, lngCenter: -80.1800, latSpread: 0.006, lngSpread: 0.004,
+    streets: ["NE 6th Ave", "NE 5th Ave", "NE 4th Ave", "NE 8th Ave", "NE 125th Ter", "NE 2nd Ave", "NE 3rd Ave", "NE 7th Ave"],
+    developers: ["NoMi Development", "Pinnacle Urban", "Zenith Capital"],
+    ncTypes: ["Mixed-Use Resi", "Class B+ MFR", "Mid-Rise Resi"],
+    cvTypes: ["Retail-to-Resi", "Office-to-Resi"],
+    rvTypes: ["Envelope + Amenity Add", "Interior Rehab", "Full Rehab — Repositioning"],
+  },
+  {
+    zip: "33181", minPerMonth: 5, maxPerMonth: 10, trend: "steady",
+    ncWeight: 0.40, cvWeight: 0.10, rvWeight: 0.50,
+    latCenter: 25.9040, lngCenter: -80.1648, latSpread: 0.008, lngSpread: 0.004,
+    streets: ["NE 135th St", "NE 137th St", "NE 140th St", "NE 142nd St", "NE 144th St", "NE 138th St", "NE 151st St"],
+    developers: ["BayPark Homes", "SilverLine Dev", "Alliance Residential"],
+    ncTypes: ["Townhome Cluster", "Boutique Resi", "Garden-Style MFR"],
+    cvTypes: ["Retail-to-Resi"],
+    rvTypes: ["Interior Rehab — Value-Add", "Full Rehab — Repositioning", "Envelope + MEP Upgrade"],
+  },
+  {
+    zip: "33109", minPerMonth: 1, maxPerMonth: 3, trend: "steady",
+    ncWeight: 0.40, cvWeight: 0.05, rvWeight: 0.55,
+    latCenter: 25.7632, lngCenter: -80.1439, latSpread: 0.002, lngSpread: 0.002,
+    streets: ["Fisher Island Dr", "Marina Dr", "Bay Ln", "Island Way"],
+    developers: ["Fisher Island Dev", "Fisher Island Holdings"],
+    ncTypes: ["Ultra-Luxury Condo"],
+    cvTypes: ["Hotel-to-Resi"],
+    rvTypes: ["Luxury Rehab", "Interior Rehab — Value-Add"],
+  },
+]
+
+function seedRandom(seed: number): () => number {
+  let s = seed
+  return () => {
+    s = (s * 1103515245 + 12345) & 0x7fffffff
+    return s / 0x7fffffff
+  }
+}
+
+function generateHistoricalPermits(): Permit[] {
+  const permits: Permit[] = []
+  const rng = seedRandom(42_7139)
+
+  const startYear = 2024
+  const startMonth = 3 // April (0-indexed)
+  const endYear = 2026
+  const endMonth = 3 // April 2026
+
+  const threeMonthsAgo = new Date(2026, 0, 10) // Jan 10 2026 as cutoff for recent
+
+  let idCounter = 0
+
+  for (const profile of ZIP_PROFILES) {
+    const cursor = new Date(startYear, startMonth, 1)
+    const end = new Date(endYear, endMonth, 1)
+    let quarterIdx = 0
+
+    while (cursor < end) {
+      const year = cursor.getFullYear()
+      const month = cursor.getMonth()
+      const totalQuarters = 9 // Q2 2024 to Q2 2026
+      const trendProgress = quarterIdx / totalQuarters
+
+      let base: number
+      switch (profile.trend) {
+        case "rising":
+          base = profile.minPerMonth + (profile.maxPerMonth - profile.minPerMonth) * trendProgress * 0.8
+          break
+        case "sharp-rise":
+          base = profile.minPerMonth + (profile.maxPerMonth - profile.minPerMonth) * Math.pow(trendProgress, 0.6)
+          break
+        case "declining":
+          base = profile.maxPerMonth - (profile.maxPerMonth - profile.minPerMonth) * trendProgress * 0.6
+          break
+        default:
+          base = (profile.minPerMonth + profile.maxPerMonth) / 2
+      }
+
+      const noise = (rng() - 0.5) * 4
+      const count = Math.max(1, Math.round(base + noise))
+      const daysInMonth = new Date(year, month + 1, 0).getDate()
+
+      for (let i = 0; i < count; i++) {
+        idCounter++
+        const day = Math.min(daysInMonth, Math.max(1, Math.floor(rng() * daysInMonth) + 1))
+        const filedDate = new Date(year, month, day)
+        const filedStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
+
+        const catRoll = rng()
+        let category: PermitCategory
+        let typePool: string[]
+        if (catRoll < profile.ncWeight) {
+          category = "new-construction"
+          typePool = profile.ncTypes
+        } else if (catRoll < profile.ncWeight + profile.cvWeight) {
+          category = "conversion"
+          typePool = profile.cvTypes
+        } else {
+          category = "renovation"
+          typePool = profile.rvTypes
+        }
+
+        const pType = typePool[Math.floor(rng() * typePool.length)]
+        const dev = profile.developers[Math.floor(rng() * profile.developers.length)]
+        const street = profile.streets[Math.floor(rng() * profile.streets.length)]
+        const streetNum = Math.floor(rng() * 19000) + 100
+
+        const lat = profile.latCenter + (rng() - 0.5) * 2 * profile.latSpread
+        const lng = profile.lngCenter + (rng() - 0.5) * 2 * profile.lngSpread
+
+        const unitBase = category === "new-construction" ? 40 : category === "conversion" ? 25 : 35
+        const unitVariance = Math.floor(rng() * 80) - 20
+        const units = Math.max(8, unitBase + unitVariance)
+
+        let status: "Permitted" | "Pending" | "Under Review"
+        if (filedDate >= threeMonthsAgo) {
+          const sRoll = rng()
+          status = sRoll < 0.4 ? "Pending" : sRoll < 0.7 ? "Under Review" : "Permitted"
+        } else {
+          status = "Permitted"
+        }
+
+        const estQOffset = Math.floor(rng() * 4) + 3
+        const estDate = new Date(year, month + estQOffset * 3, 1)
+        const estQ = Math.floor(estDate.getMonth() / 3) + 1
+        const est = `Q${estQ} ${estDate.getFullYear()}`
+
+        permits.push({
+          id: `gen-${idCounter}`,
+          zip: profile.zip,
+          addr: `${streetNum} ${street}`,
+          lat: Math.round(lat * 10000) / 10000,
+          lng: Math.round(lng * 10000) / 10000,
+          units,
+          type: pType,
+          category,
+          status,
+          dev,
+          est,
+          filed: filedStr,
+        })
+      }
+
+      cursor.setMonth(cursor.getMonth() + 1)
+      if (month % 3 === 2) quarterIdx++
+    }
+  }
+
+  return permits
+}
+
+export const PERMITS: Permit[] = [...CURRENT_PERMITS, ...generateHistoricalPermits()]
+
+export const AI_SUMMARIES: Record<string, string> = {
+  all: "Market-wide permit activity across Miami Beach and North Miami is trending upward with 2026 Q1 showing the highest quarterly volume in 2 years. South Beach and North Miami are driving growth — South Beach through luxury conversions and new construction, North Miami through the R4 upzone unlocking 8-story density on NE 125th St. Sunny Isles is cooling after a 2025 peak. Renovation permits are accelerating across all ZIPs, suggesting institutional capital is repositioning existing stock ahead of new supply deliveries.",
+  "33109": "Fisher Island remains an ultra-exclusive micro-market with minimal permit activity (1-3/month). The few filings are luxury rehabs and single ultra-premium new construction projects. No change-of-use activity. The island's ferry-only access and $15K+ avg rents create a natural supply constraint that makes permit tracking less relevant here — focus is on off-market individual unit acquisitions.",
+  "33139": "South Beach is the most active permit market in the coverage area. New construction filings accelerated sharply in Q1 2026, driven by Terra Group and Rockpoint Group entering the submarket. Hotel-to-resi and hotel-to-condo conversions are a dominant play — 3 major conversion permits filed since March 2026. The condo conversion moratorium is being tested by several developers. Renovation volume is also elevated, with Related Group and Aimco repositioning Class B assets to Class A.",
+  "33140": "Mid-Beach permit activity is steady with a slight upward trend. The Fontainebleau Development hotel-to-resi conversion at 4401 Collins is the most significant recent filing — signals institutional confidence in the submarket. Boutique luxury product continues to outperform large Class A on per-unit rent. Starwood Capital's interior rehab at 4100 Pine Tree Dr is a bellwether for the value-add thesis here.",
+  "33141": "North Beach is showing early signs of a breakout. Permit volume has been rising for 3 consecutive quarters as developers discover the discount to South/Mid Beach. Ocean Ventures and Coastal Builders have filed new MFR projects on Collins Ave. Greystar's full rehab at 7300 Harding Ave signals institutional renovation capital arriving. The MBRO climate overlay is complicating mixed-use plays — permits trending toward residential-only designs.",
+  "33154": "Surfside/Bal Harbour activity is renovation-heavy in the wake of the Champlain Towers collapse. New construction is constrained by Bal Harbour's strict zoning. Surf Club Dev's boutique luxury project at 9500 Collins is the only major new-build. The retail-to-resi conversion at 9601 Collins by Bal Harbour Group is notable — suggests commercial vacancy is pushing landlords toward residential use. Vacancy at 3.2% is the tightest in the coverage area.",
+  "33160": "Sunny Isles peaked in mid-2025 and is now cooling. The luxury tower pipeline (Atlantic Crest at 17501 Collins) is still active but new filings have slowed. International buyer demand remains but is price-sensitive at current levels. Dezer Development's hotel-to-condo conversion at 18001 Collins is a pivot from their typical ground-up strategy — may signal a top. Turnberry Associates' renovation at 17900 Collins suggests a shift toward value-add over new supply.",
+  "33161": "North Miami is the breakout story. Permit volume has surged since the R4 upzone was approved on NE 125th St in February 2026, unlocking 8-story density. NMB Capital was first to file under the new zoning. Blackstone RE's full rehab at 12500 NE 6th Ave (72 units) is the largest institutional renovation play in the submarket. Land at $35-45/sf is well below coastal comps — expect continued acceleration through 2026.",
+  "33162": "N. Miami NE / Ojus Corridor has steady, workforce-oriented permit activity. Sunline Housing's 112-unit workforce MFR is the largest filing. The corridor's higher vacancy (5.8%) and heavier delivery calendar require conservative underwriting. Gateway Urban's mixed-income project at 2210 NE 163rd suggests developers are hedging with income-restricted units. Morgan Properties' repositioning at 16200 NE 18th Ave is the institutional benchmark here.",
+  "33167": "North Miami NW is a quiet corridor dominated by LIHTC and workforce housing filings. Community Housing Group's 72-unit project at 1200 NW 135th has LIHTC credits — signals county commitment to affordable pipeline. Greenway Partners' garden-style MFR at 700 NW 119th is under review. Housing Trust Group's workforce rehab at 1100 NW 132nd rounds out a purely mission-driven permit profile. Not a conventional investment play.",
+  "33168": "North Miami Central is heating up around the MOCA Arts District and FIU Biscayne Bay Campus. NoMi Development's mixed-use filing at 13600 NE 6th Ave is ground-floor retail with 7 stories of residential — first mixed-use permit near MOCA in 18 months. Pinnacle Urban and Zenith Capital are both active. Student and young-professional demand provides a rent floor. Value-add at $10-15k/unit door is the strongest play.",
+  "33181": "North Miami South is a sleeper market. Low pipeline (62 new-construction units) and moderate vacancy (4.9%) make it attractive for small-scale infill. BayPark Homes' townhome cluster at 1850 NE 135th is the type of product that works here — low-density, move-up renters priced out of Aventura. Alliance Residential's value-add rehab at 1500 NE 140th is testing institutional appetite. Proximity to Aventura and Sunny Isles drives tenant demand.",
+}
+
+export const ALERTS_SUMMARY = {
+  current: "The Miami Beach and North Miami permit market is in an expansion phase. Q1 2026 saw the highest quarterly filing volume in 2 years, driven by South Beach conversions and North Miami new construction following the R4 upzone. 28 permits were filed in the last 30 days across all categories.",
+  thisWeek: "This week's notable filings: Lincoln Property filed a 68-unit Class B-to-A rehab at 1500 Bay Rd in South Beach — the largest renovation permit this quarter. Alliance Residential entered North Miami South with a 24-unit value-add play. Shvo Group's hotel-to-condo conversion at 760 Ocean Dr is testing the condo moratorium boundaries.",
+  thisMonth: "April 2026 highlights: Rockpoint Group's 104-unit Class A MFR at 430 W 41st St is the largest new construction filing. Three conversion permits filed in South Beach alone — hotel-to-resi, retail-to-resi, and hotel-to-condo. Blackstone RE's entry into North Miami with a 72-unit full rehab signals institutional renovation capital is flowing north of the beach.",
+}

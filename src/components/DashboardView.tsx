@@ -9,6 +9,7 @@ import {
   YAxis,
 } from "recharts"
 import type { Permit, PermitCategory, ZipRecord } from "../data/zips"
+import { AI_SUMMARIES } from "../data/zips"
 import { formatCurrency, getScoreMeta } from "./scoreUtils"
 
 type DashboardViewProps = {
@@ -18,23 +19,18 @@ type DashboardViewProps = {
 
 type CategoryFilter = "all" | PermitCategory
 
-function monthKey(date: Date): string {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`
+function quarterKey(date: Date): string {
+  const q = Math.floor(date.getMonth() / 3) + 1
+  return `Q${q} ${date.getFullYear()}`
 }
 
-function monthLabel(key: string): string {
-  const [y, m] = key.split("-")
-  const d = new Date(Number(y), Number(m) - 1)
-  return d.toLocaleString("en-US", { month: "short", year: "2-digit" })
-}
-
-function generateMonthRange(startDate: Date, endDate: Date): string[] {
+function generateQuarterRange(startDate: Date, endDate: Date): string[] {
   const keys: string[] = []
-  const cursor = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
-  const end = new Date(endDate.getFullYear(), endDate.getMonth(), 1)
+  const cursor = new Date(startDate.getFullYear(), Math.floor(startDate.getMonth() / 3) * 3, 1)
+  const end = new Date(endDate.getFullYear(), Math.floor(endDate.getMonth() / 3) * 3, 1)
   while (cursor <= end) {
-    keys.push(monthKey(cursor))
-    cursor.setMonth(cursor.getMonth() + 1)
+    keys.push(quarterKey(cursor))
+    cursor.setMonth(cursor.getMonth() + 3)
   }
   return keys
 }
@@ -52,35 +48,34 @@ export function DashboardView({ permits, zips }: DashboardViewProps) {
     return result
   }, [permits, selectedZip, categoryFilter])
 
-  const monthRange = useMemo(() => {
+  const quarterRange = useMemo(() => {
     if (filtered.length === 0) return []
     const dates = filtered.map((p) => new Date(p.filed))
     const minDate = new Date(Math.min(...dates.map((d) => d.getTime())))
     const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())))
-    return generateMonthRange(minDate, maxDate)
+    return generateQuarterRange(minDate, maxDate)
   }, [filtered])
 
-  // Per-ZIP trend data
   const zipTrends = useMemo(() => {
     const zipMap = new Map<string, Map<string, { filed: number; permitted: number }>>()
 
     for (const p of filtered) {
-      const mk = monthKey(new Date(p.filed))
+      const qk = quarterKey(new Date(p.filed))
       if (!zipMap.has(p.zip)) zipMap.set(p.zip, new Map())
       const zipData = zipMap.get(p.zip)!
-      if (!zipData.has(mk)) zipData.set(mk, { filed: 0, permitted: 0 })
-      const entry = zipData.get(mk)!
+      if (!zipData.has(qk)) zipData.set(qk, { filed: 0, permitted: 0 })
+      const entry = zipData.get(qk)!
       entry.filed++
       if (p.status === "Permitted") entry.permitted++
     }
 
-    const results: { zip: string; name: string; data: { month: string; label: string; filed: number; permitted: number }[] }[] = []
+    const results: { zip: string; name: string; data: { quarter: string; filed: number; permitted: number }[] }[] = []
 
-    for (const [zip, monthData] of zipMap) {
+    for (const [zip, quarterData] of zipMap) {
       const zr = zipsByCode.get(zip)
-      const data = monthRange.map((mk) => {
-        const entry = monthData.get(mk)
-        return { month: mk, label: monthLabel(mk), filed: entry?.filed ?? 0, permitted: entry?.permitted ?? 0 }
+      const data = quarterRange.map((qk) => {
+        const entry = quarterData.get(qk)
+        return { quarter: qk, filed: entry?.filed ?? 0, permitted: entry?.permitted ?? 0 }
       })
       results.push({ zip, name: zr?.name ?? zip, data })
     }
@@ -90,9 +85,8 @@ export function DashboardView({ permits, zips }: DashboardViewProps) {
       const bTotal = b.data.reduce((s, d) => s + d.filed, 0)
       return bTotal - aTotal
     })
-  }, [filtered, monthRange, zipsByCode])
+  }, [filtered, quarterRange, zipsByCode])
 
-  // Cold zones: ZIPs with zero or very few permits in the last 6 months
   const coldZones = useMemo(() => {
     const sixMonthsAgo = new Date()
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
@@ -113,13 +107,14 @@ export function DashboardView({ permits, zips }: DashboardViewProps) {
       .sort((a, b) => a.recentPermits - b.recentPermits)
   }, [zips, permits, categoryFilter])
 
-  // KPI stats
   const nc = filtered.filter((p) => p.category === "new-construction")
   const cv = filtered.filter((p) => p.category === "conversion")
   const rv = filtered.filter((p) => p.category === "renovation")
   const ncUnits = nc.reduce((s, p) => s + p.units, 0)
   const cvUnits = cv.reduce((s, p) => s + p.units, 0)
   const rvUnits = rv.reduce((s, p) => s + p.units, 0)
+
+  const aiSummary = selectedZip === "all" ? AI_SUMMARIES.all : AI_SUMMARIES[selectedZip] ?? null
 
   return (
     <section className="h-full overflow-y-auto p-6">
@@ -179,10 +174,18 @@ export function DashboardView({ permits, zips }: DashboardViewProps) {
           </div>
         </div>
 
+        {/* AI Summary */}
+        {aiSummary && (
+          <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-4">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-[#94a3b8]">AI Analysis</div>
+            <p className="mt-2 text-sm leading-relaxed text-[#334155]">{aiSummary}</p>
+          </div>
+        )}
+
         {/* Permit Trends by ZIP */}
         <div className="rounded-xl border border-[#e2e8f0] bg-white p-4">
           <div className="text-sm font-semibold text-[#0f172a]">Permit Trends by ZIP</div>
-          <p className="mt-0.5 text-[10px] text-[#64748b]">Monthly filed vs permitted count over selected range</p>
+          <p className="mt-0.5 text-[10px] text-[#64748b]">Quarterly filed vs permitted count over selected range</p>
 
           {zipTrends.length === 0 ? (
             <div className="mt-4 text-xs text-[#94a3b8]">No permit data for current filters.</div>
@@ -198,7 +201,7 @@ export function DashboardView({ permits, zips }: DashboardViewProps) {
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={zt.data}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                        <XAxis dataKey="label" tick={{ fill: "#64748b", fontSize: 9 }} interval="preserveStartEnd" />
+                        <XAxis dataKey="quarter" tick={{ fill: "#64748b", fontSize: 9 }} interval="preserveStartEnd" />
                         <YAxis tick={{ fill: "#64748b", fontSize: 9 }} allowDecimals={false} width={24} />
                         <Tooltip />
                         <Line type="monotone" dataKey="filed" name="Filed" stroke="#1d4ed8" strokeWidth={2} dot={false} />

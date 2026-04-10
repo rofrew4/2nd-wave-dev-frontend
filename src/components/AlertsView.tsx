@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react"
 import type { Permit, ZipRecord } from "../data/zips"
+import { ALERTS_SUMMARY } from "../data/zips"
 
 type AlertsViewProps = {
   permits: Permit[]
@@ -43,7 +44,7 @@ export function AlertsView({ permits, zips }: AlertsViewProps) {
 
   return (
     <section className="h-full overflow-y-auto p-6">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold text-[#0f172a]">Alerts</h2>
@@ -61,44 +62,67 @@ export function AlertsView({ permits, zips }: AlertsViewProps) {
           </div>
         </div>
 
-        <div className="mt-4 space-y-2">
-          {sorted.map((p) => {
-            const catColor = CATEGORY_COLORS[p.category] ?? "#94a3b8"
-            const sc = STATUS_COLORS[p.status] ?? "#94a3b8"
-            const zr = zipsByCode.get(p.zip)
-            const days = daysSince(p.filed)
-            const isNew = days <= 7
-            const isRecentFiling = days <= 30
+        <div className="mt-4 flex gap-5">
+          {/* Left column: permit feed (70%) */}
+          <div className="w-[70%] space-y-2">
+            {sorted.map((p) => {
+              const catColor = CATEGORY_COLORS[p.category] ?? "#94a3b8"
+              const sc = STATUS_COLORS[p.status] ?? "#94a3b8"
+              const zr = zipsByCode.get(p.zip)
+              const days = daysSince(p.filed)
+              const isNew = days <= 7
+              const isRecentFiling = days <= 30
 
-            return (
-              <article key={p.id} className={`rounded-xl border bg-white p-4 shadow-sm ${isNew ? "border-[#93c5fd] bg-[#eff6ff]/50" : "border-[#e2e8f0]"}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded px-2 py-0.5 text-[10px] font-bold text-white" style={{ backgroundColor: catColor }}>{CATEGORY_LABELS[p.category]}</span>
-                      <span className="flex items-center gap-1 text-[10px]">
-                        <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: sc }} />
-                        <span className="font-medium text-[#334155]">{p.status}</span>
-                      </span>
-                      <span className="rounded-full bg-[#f1f5f9] px-2 py-0.5 text-[10px] font-medium text-[#334155]">ZIP {p.zip}</span>
-                      {isNew && <span className="rounded-full bg-[#dbeafe] px-2 py-0.5 text-[10px] font-semibold text-[#1d4ed8]">NEW</span>}
-                      {!isNew && isRecentFiling && <span className="text-[10px] text-[#2563eb]">Last 30d</span>}
+              return (
+                <article key={p.id} className={`rounded-xl border bg-white p-4 shadow-sm ${isNew ? "border-[#93c5fd] bg-[#eff6ff]/50" : "border-[#e2e8f0]"}`}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="rounded px-2 py-0.5 text-[10px] font-bold text-white" style={{ backgroundColor: catColor }}>{CATEGORY_LABELS[p.category]}</span>
+                        <span className="flex items-center gap-1 text-[10px]">
+                          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: sc }} />
+                          <span className="font-medium text-[#334155]">{p.status}</span>
+                        </span>
+                        <span className="rounded-full bg-[#f1f5f9] px-2 py-0.5 text-[10px] font-medium text-[#334155]">ZIP {p.zip}</span>
+                        {isNew && <span className="rounded-full bg-[#dbeafe] px-2 py-0.5 text-[10px] font-semibold text-[#1d4ed8]">NEW</span>}
+                        {!isNew && isRecentFiling && <span className="text-[10px] text-[#2563eb]">Last 30d</span>}
+                      </div>
+                      <h3 className="mt-2 text-sm font-semibold text-[#0f172a]">
+                        {p.units}-unit {p.type.toLowerCase()} at {p.addr}
+                      </h3>
+                      <p className="mt-0.5 text-sm text-[#64748b]">
+                        {p.dev} · Est. delivery {p.est} · {zr?.name ?? p.zip}
+                      </p>
                     </div>
-                    <h3 className="mt-2 text-sm font-semibold text-[#0f172a]">
-                      {p.units}-unit {p.type.toLowerCase()} at {p.addr}
-                    </h3>
-                    <p className="mt-0.5 text-sm text-[#64748b]">
-                      {p.dev} · Est. delivery {p.est} · {zr?.name ?? p.zip}
-                    </p>
+                    <div className="shrink-0 text-right">
+                      <div className="text-xs font-semibold text-[#0f172a]">{p.filed}</div>
+                      <div className="text-[10px] text-[#94a3b8]">{days === 0 ? "Today" : `${days}d ago`}</div>
+                    </div>
                   </div>
-                  <div className="shrink-0 text-right">
-                    <div className="text-xs font-semibold text-[#0f172a]">{p.filed}</div>
-                    <div className="text-[10px] text-[#94a3b8]">{days === 0 ? "Today" : `${days}d ago`}</div>
-                  </div>
-                </div>
-              </article>
-            )
-          })}
+                </article>
+              )
+            })}
+          </div>
+
+          {/* Right column: AI summary sidebar (30%) */}
+          <div className="w-[30%]">
+            <div className="sticky top-6 space-y-4">
+              <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-4">
+                <div className="text-xs font-semibold text-[#0f172a]">Market Summary</div>
+                <p className="mt-2 text-[12px] leading-relaxed text-[#475569]">{ALERTS_SUMMARY.current}</p>
+              </div>
+
+              <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-4">
+                <div className="text-xs font-semibold text-[#0f172a]">This Week</div>
+                <p className="mt-2 text-[12px] leading-relaxed text-[#475569]">{ALERTS_SUMMARY.thisWeek}</p>
+              </div>
+
+              <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-4">
+                <div className="text-xs font-semibold text-[#0f172a]">This Month</div>
+                <p className="mt-2 text-[12px] leading-relaxed text-[#475569]">{ALERTS_SUMMARY.thisMonth}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

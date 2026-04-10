@@ -5,19 +5,10 @@ type SidebarProps = {
   onViewChange: (view: ActiveView) => void
 }
 
-type NavItem = {
-  id: ActiveView
-  label: string
-  icon: string
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { id: "supply", label: "Supply Tracker", icon: "🏗" },
-  { id: "conversions", label: "Conversion Watch", icon: "🔄" },
-  { id: "momentum", label: "Neighborhood Momentum", icon: "📈" },
-  { id: "rental", label: "Rental Map", icon: "🏠" },
-  { id: "watchlist", label: "Watchlist", icon: "🔖" },
-  { id: "settings", label: "Settings", icon: "⚙" },
+const NAV_ITEMS: { id: ActiveView; label: string; icon: string }[] = [
+  { id: "map", label: "Map", icon: "🗺" },
+  { id: "dashboard", label: "Dashboard", icon: "📊" },
+  { id: "alerts", label: "Alerts", icon: "🔔" },
 ]
 
 export function Sidebar({ activeView, onViewChange }: SidebarProps) {
@@ -28,17 +19,16 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
           Z
         </div>
 
-        <nav className="flex flex-col items-center gap-1.5">
+        <nav className="flex flex-col items-center gap-2">
           {NAV_ITEMS.map((item) => {
             const active = activeView === item.id
-
             return (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => onViewChange(item.id)}
                 title={item.label}
-                className={`flex h-9 w-9 items-center justify-center rounded-lg text-[15px] transition ${
+                className={`flex h-9 w-9 items-center justify-center rounded-lg text-[16px] transition ${
                   active
                     ? "bg-[#eff6ff] text-[#2563eb]"
                     : "text-[#64748b] hover:bg-[#f8fafc]"

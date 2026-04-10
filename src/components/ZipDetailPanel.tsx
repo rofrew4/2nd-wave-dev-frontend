@@ -18,9 +18,9 @@ type ZipDetailPanelProps = {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  Permitted: "#16a34a",
-  Pending: "#f59e0b",
-  "Under Review": "#6366f1",
+  Permitted: "#0f766e",
+  Pending: "#2563eb",
+  "Under Review": "#94a3b8",
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -66,7 +66,7 @@ export function ZipDetailPanel({ zipRecord, permits, onClose }: ZipDetailPanelPr
           </div>
           <p className="text-xs text-[#64748b]">{zipRecord.name}</p>
         </div>
-        <button type="button" onClick={onClose} className="rounded-md border border-[#e2e8f0] px-2 py-1 text-xs text-[#64748b] hover:bg-[#f8fafc]" aria-label="Close">×</button>
+        <button type="button" onClick={onClose} className="rounded-md border border-[#e2e8f0] px-2 py-1 text-xs text-[#64748b] hover:bg-[#f8fafc]" aria-label="Close">x</button>
       </div>
 
       <div className="mt-3 grid grid-cols-4 gap-2 text-[10px]">
@@ -78,8 +78,8 @@ export function ZipDetailPanel({ zipRecord, permits, onClose }: ZipDetailPanelPr
 
       <div className="mt-2 flex gap-1.5 text-[10px]">
         {ncUnits > 0 && <span className="rounded bg-[#dbeafe] px-1.5 py-0.5 font-medium text-[#1e40af]">{ncUnits}u new const</span>}
-        {cvCount > 0 && <span className="rounded bg-[#ede9fe] px-1.5 py-0.5 font-medium text-[#5b21b6]">{cvCount} conversions</span>}
-        {rvCount > 0 && <span className="rounded bg-[#ffedd5] px-1.5 py-0.5 font-medium text-[#9a3412]">{rvCount} renovations</span>}
+        {cvCount > 0 && <span className="rounded bg-[#cffafe] px-1.5 py-0.5 font-medium text-[#0e7490]">{cvCount} conversions</span>}
+        {rvCount > 0 && <span className="rounded bg-[#f1f5f9] px-1.5 py-0.5 font-medium text-[#475569]">{rvCount} renovations</span>}
       </div>
 
       <div className="mt-3 grid grid-cols-2 rounded-lg bg-[#f8fafc] p-1 text-xs">

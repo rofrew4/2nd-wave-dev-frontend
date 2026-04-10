@@ -5,18 +5,18 @@ export type ScoreMeta = {
 
 export function getScoreMeta(score: number): ScoreMeta {
   if (score >= 80) {
-    return { color: "#16a34a", label: "Strong Buy" }
+    return { color: "#1d4ed8", label: "Strong Buy" }
   }
 
   if (score >= 70) {
-    return { color: "#2563eb", label: "Opportunity" }
+    return { color: "#3b82f6", label: "Opportunity" }
   }
 
   if (score >= 60) {
-    return { color: "#d97706", label: "Neutral" }
+    return { color: "#64748b", label: "Neutral" }
   }
 
-  return { color: "#dc2626", label: "High Risk" }
+  return { color: "#94a3b8", label: "High Risk" }
 }
 
 export function formatCurrency(value: number) {

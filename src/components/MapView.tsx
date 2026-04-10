@@ -16,21 +16,21 @@ type MapViewProps = {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  Permitted: "#16a34a",
-  Pending: "#f59e0b",
-  "Under Review": "#6366f1",
+  Permitted: "#0f766e",
+  Pending: "#2563eb",
+  "Under Review": "#94a3b8",
 }
 
 const STATUS_ICONS: Record<string, string> = {
-  Permitted: "✓",
-  Pending: "●",
-  "Under Review": "◎",
+  Permitted: "\u2713",
+  Pending: "\u25CF",
+  "Under Review": "\u25CE",
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "new-construction": "#2563eb",
-  conversion: "#7c3aed",
-  renovation: "#ea580c",
+  "new-construction": "#1d4ed8",
+  conversion: "#0891b2",
+  renovation: "#64748b",
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -81,17 +81,23 @@ function ImperativeLayer({
   const markersRef = useRef<L.LayerGroup | null>(null)
   const selectedRef = useRef(selectedZip)
   const selectRef = useRef(onSelectZip)
+  const hasFitBounds = useRef(false)
 
   useEffect(() => { selectedRef.current = selectedZip }, [selectedZip])
   useEffect(() => { selectRef.current = onSelectZip }, [onSelectZip])
 
+  // Initial fitBounds — only once
   useEffect(() => {
-    if (polyRef.current) { map.removeLayer(polyRef.current); polyRef.current = null }
-    if (markersRef.current) { map.removeLayer(markersRef.current); markersRef.current = null }
-    if (!geoJson || !geoJson.features.length) return
-
+    if (!geoJson || !geoJson.features.length || hasFitBounds.current) return
     const tempLayer = L.geoJSON(geoJson as GeoJsonObject)
     map.fitBounds(tempLayer.getBounds(), { padding: [60, 60] })
+    hasFitBounds.current = true
+  }, [geoJson, map])
+
+  // Polygon layer — depends on geoJson, showRental, zipsByCode
+  useEffect(() => {
+    if (polyRef.current) { map.removeLayer(polyRef.current); polyRef.current = null }
+    if (!geoJson || !geoJson.features.length) return
 
     if (showRental) {
       const poly = L.geoJSON(geoJson as GeoJsonObject, {
@@ -127,6 +133,15 @@ function ImperativeLayer({
       }).addTo(map)
       polyRef.current = poly
     }
+
+    return () => {
+      if (polyRef.current) { map.removeLayer(polyRef.current); polyRef.current = null }
+    }
+  }, [geoJson, zipsByCode, showRental, map])
+
+  // Marker layer — depends on permits, showPermits
+  useEffect(() => {
+    if (markersRef.current) { map.removeLayer(markersRef.current); markersRef.current = null }
 
     if (showPermits && permits.length > 0) {
       const markers = L.layerGroup()
@@ -169,10 +184,9 @@ function ImperativeLayer({
     }
 
     return () => {
-      if (polyRef.current) { map.removeLayer(polyRef.current); polyRef.current = null }
       if (markersRef.current) { map.removeLayer(markersRef.current); markersRef.current = null }
     }
-  }, [geoJson, zipsByCode, permits, showRental, showPermits, map])
+  }, [permits, showPermits, zipsByCode, map])
 
   useEffect(() => {
     if (!polyRef.current || !showRental) return
@@ -226,7 +240,7 @@ function FilterBar({
           Permits
         </button>
         <button type="button" onClick={() => setShowRental(!showRental)}
-          className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition ${showRental ? "bg-[#16a34a] text-white" : "bg-[#f1f5f9] text-[#64748b] hover:bg-[#e2e8f0]"}`}>
+          className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition ${showRental ? "bg-[#0f766e] text-white" : "bg-[#f1f5f9] text-[#64748b] hover:bg-[#e2e8f0]"}`}>
           Rental Data
         </button>
       </div>
@@ -235,7 +249,7 @@ function FilterBar({
         <>
           <div className="flex items-center gap-1">
             <span className="text-[10px] text-[#94a3b8]">Date:</span>
-            {[{ v: 0, l: "All" }, { v: 7, l: "7d" }, { v: 30, l: "30d" }, { v: 90, l: "90d" }].map((o) => (
+            {[{ v: 0, l: "All" }, { v: 30, l: "30d" }, { v: 180, l: "6mo" }, { v: 365, l: "1yr" }, { v: 730, l: "2yr" }].map((o) => (
               <button key={o.v} type="button" onClick={() => setDateFilter(o.v)}
                 className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${dateFilter === o.v ? "bg-[#eff6ff] text-[#2563eb]" : "text-[#64748b] hover:bg-[#f8fafc]"}`}>
                 {o.l}
@@ -285,15 +299,15 @@ function MapLegend({ showPermits, showRental }: { showPermits: boolean; showRent
         <div>
           <div className="text-[10px] font-semibold text-[#0f172a]">Permit Type</div>
           <div className="mt-1 space-y-0.5">
-            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#2563eb]" /><span className="text-[10px] text-[#64748b]">New Construction</span></div>
-            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#7c3aed]" /><span className="text-[10px] text-[#64748b]">Conversion</span></div>
-            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#ea580c]" /><span className="text-[10px] text-[#64748b]">Renovation</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#1d4ed8]" /><span className="text-[10px] text-[#64748b]">New Construction</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#0891b2]" /><span className="text-[10px] text-[#64748b]">Conversion</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#64748b]" /><span className="text-[10px] text-[#64748b]">Renovation</span></div>
           </div>
           <div className="mt-2 text-[10px] font-semibold text-[#0f172a]">Status (border)</div>
           <div className="mt-1 space-y-0.5">
-            <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full border-2 border-[#16a34a]" /><span className="text-[10px] text-[#64748b]">Permitted</span></div>
-            <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full border-2 border-[#f59e0b]" /><span className="text-[10px] text-[#64748b]">Pending</span></div>
-            <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full border-2 border-[#6366f1]" /><span className="text-[10px] text-[#64748b]">Under Review</span></div>
+            <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full border-2 border-[#0f766e]" /><span className="text-[10px] text-[#64748b]">Permitted</span></div>
+            <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full border-2 border-[#2563eb]" /><span className="text-[10px] text-[#64748b]">Pending</span></div>
+            <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full border-2 border-[#94a3b8]" /><span className="text-[10px] text-[#64748b]">Under Review</span></div>
           </div>
         </div>
       )}
@@ -302,9 +316,9 @@ function MapLegend({ showPermits, showRental }: { showPermits: boolean; showRent
         <div>
           <div className="text-[10px] font-semibold text-[#0f172a]">Rental Score</div>
           <div className="mt-1 space-y-0.5">
-            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#16a34a]" /><span className="text-[10px] text-[#64748b]">Strong Buy</span></div>
-            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#2563eb]" /><span className="text-[10px] text-[#64748b]">Opportunity</span></div>
-            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#d97706]" /><span className="text-[10px] text-[#64748b]">Neutral</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#1d4ed8]" /><span className="text-[10px] text-[#64748b]">Strong Buy</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#3b82f6]" /><span className="text-[10px] text-[#64748b]">Opportunity</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#64748b]" /><span className="text-[10px] text-[#64748b]">Neutral</span></div>
           </div>
         </div>
       )}

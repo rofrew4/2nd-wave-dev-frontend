@@ -15,15 +15,15 @@ const CATEGORY_LABELS: Record<string, string> = {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "new-construction": "#2563eb",
-  conversion: "#7c3aed",
-  renovation: "#ea580c",
+  "new-construction": "#1d4ed8",
+  conversion: "#0891b2",
+  renovation: "#64748b",
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  Permitted: "#16a34a",
-  Pending: "#f59e0b",
-  "Under Review": "#6366f1",
+  Permitted: "#0f766e",
+  Pending: "#2563eb",
+  "Under Review": "#94a3b8",
 }
 
 function daysSince(filed: string): number {
@@ -68,7 +68,7 @@ export function AlertsView({ permits, zips }: AlertsViewProps) {
             const zr = zipsByCode.get(p.zip)
             const days = daysSince(p.filed)
             const isNew = days <= 7
-            const isRecent = days <= 30
+            const isRecentFiling = days <= 30
 
             return (
               <article key={p.id} className={`rounded-xl border bg-white p-4 shadow-sm ${isNew ? "border-[#93c5fd] bg-[#eff6ff]/50" : "border-[#e2e8f0]"}`}>
@@ -82,7 +82,7 @@ export function AlertsView({ permits, zips }: AlertsViewProps) {
                       </span>
                       <span className="rounded-full bg-[#f1f5f9] px-2 py-0.5 text-[10px] font-medium text-[#334155]">ZIP {p.zip}</span>
                       {isNew && <span className="rounded-full bg-[#dbeafe] px-2 py-0.5 text-[10px] font-semibold text-[#1d4ed8]">NEW</span>}
-                      {!isNew && isRecent && <span className="text-[10px] text-[#2563eb]">Last 30d</span>}
+                      {!isNew && isRecentFiling && <span className="text-[10px] text-[#2563eb]">Last 30d</span>}
                     </div>
                     <h3 className="mt-2 text-sm font-semibold text-[#0f172a]">
                       {p.units}-unit {p.type.toLowerCase()} at {p.addr}

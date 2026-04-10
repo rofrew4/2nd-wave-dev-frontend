@@ -13,6 +13,9 @@ type GeoCollection = GeoJSON.FeatureCollection<
 const ZIP_KEYS = ["ZCTA5CE10", "ZCTA5CE20", "ZCTA5CE", "zip", "ZIP", "GEOID10"]
 const ZIP_SET = new Set<string>(ZIP_WHITELIST)
 
+let cachedGeoJson: GeoCollection | null = null
+let cachePromise: Promise<GeoCollection> | null = null
+
 function extractZip(feature: GeoFeature): string | null {
   const props = feature.properties ?? {}
 
@@ -26,71 +29,72 @@ function extractZip(feature: GeoFeature): string | null {
   return null
 }
 
+function fetchAndFilter(): Promise<GeoCollection> {
+  if (cachePromise) return cachePromise
+
+  cachePromise = fetch(GEOJSON_URL)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`GeoJSON fetch failed (${response.status})`)
+      }
+      return response.json() as Promise<GeoCollection>
+    })
+    .then((payload) => {
+      const features = payload.features
+        .map((feature) => {
+          const zip = extractZip(feature)
+          if (!zip) return null
+          return {
+            ...feature,
+            properties: { ...(feature.properties ?? {}), zip },
+          } as GeoFeature
+        })
+        .filter(
+          (feature): feature is GeoFeature =>
+            !!feature && ZIP_SET.has(String(feature.properties.zip)),
+        )
+
+      const result: GeoCollection = { type: "FeatureCollection", features }
+      cachedGeoJson = result
+      return result
+    })
+    .catch((err) => {
+      cachePromise = null
+      throw err
+    })
+
+  return cachePromise
+}
+
 export function useZipData() {
-  const [geoJson, setGeoJson] = useState<GeoCollection | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [geoJson, setGeoJson] = useState<GeoCollection | null>(cachedGeoJson)
+  const [isLoading, setIsLoading] = useState(!cachedGeoJson)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const abortController = new AbortController()
+    if (cachedGeoJson) return
 
-    async function load() {
-      try {
-        setIsLoading(true)
-        setError(null)
+    let cancelled = false
 
-        const response = await fetch(GEOJSON_URL, {
-          signal: abortController.signal,
-        })
-        if (!response.ok) {
-          throw new Error(`GeoJSON fetch failed (${response.status})`)
-        }
-
-        const payload = (await response.json()) as GeoCollection
-
-        const features = payload.features
-          .map((feature) => {
-            const zip = extractZip(feature)
-            if (!zip) {
-              return null
-            }
-
-            return {
-              ...feature,
-              properties: {
-                ...(feature.properties ?? {}),
-                zip,
-              },
-            } as GeoFeature
-          })
-          .filter(
-            (feature): feature is GeoFeature =>
-              !!feature && ZIP_SET.has(String(feature.properties.zip)),
-          )
-
-        setGeoJson({
-          type: "FeatureCollection",
-          features,
-        })
-      } catch (fetchError) {
-        if (abortController.signal.aborted) {
-          return
-        }
-
-        setError(
-          fetchError instanceof Error
-            ? fetchError.message
-            : "Unknown error while loading GeoJSON.",
-        )
-      } finally {
-        if (!abortController.signal.aborted) {
+    fetchAndFilter()
+      .then((data) => {
+        if (!cancelled) {
+          setGeoJson(data)
           setIsLoading(false)
         }
-      }
-    }
+      })
+      .catch((fetchError) => {
+        if (!cancelled) {
+          setError(
+            fetchError instanceof Error
+              ? fetchError.message
+              : "Unknown error while loading GeoJSON.",
+          )
+          setIsLoading(false)
+        }
+      })
 
-    load()
-    return () => abortController.abort()
+    return () => { cancelled = true }
   }, [])
 
   return { geoJson, isLoading, error }

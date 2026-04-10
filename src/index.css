@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  background-color: #f1f5f9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #f1f5f9;
+}
+
+.zip-tooltip.leaflet-tooltip {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+  padding: 8px 10px;
+  background: #ffffff;
+  color: #0f172a;
+  max-width: 320px;
+}
+
+.zip-tooltip.leaflet-tooltip::before {
+  display: none;
+}
+
+/* Individual permit markers */
+.permit-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.permit-pin {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.permit-pin:hover {
+  transform: scale(1.2);
+}
+
+.permit-icon {
+  font-size: 10px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.permit-label {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #334155;
+  margin-top: 1px;
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff;
+  line-height: 1.2;
+}
